@@ -39,7 +39,7 @@ const PilotCard = ({ pilot }: { pilot: Pilot }) => (
         <Button variant="outline" size="sm" className="flex-1" asChild>
           <Link to={`/pilot/${pilot.id}`}>View Profile</Link>
         </Button>
-        <Button size="sm" className="flex-1" asChild>
+        <Button size="sm" className="flex-1 bg-[#25D366] hover:bg-[#128C7E] text-white border-0" asChild>
           <a href={`https://wa.me/${pilot.whatsapp}`} target="_blank" rel="noopener noreferrer">
             WhatsApp
           </a>
