@@ -67,7 +67,7 @@ const PilotProfile = () => {
               </div>
             </div>
 
-            <Button className="mt-8 w-full" size="lg" asChild>
+            <Button className="mt-8 w-full bg-[#25D366] hover:bg-[#128C7E] text-white border-0" size="lg" asChild>
               <a href={`https://wa.me/${pilot.whatsapp}`} target="_blank" rel="noopener noreferrer">
                 Contact via WhatsApp
               </a>
