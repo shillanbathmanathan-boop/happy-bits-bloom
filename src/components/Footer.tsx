@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
-import logo from "@/assets/logo.png";
+import logoIcon from "@/assets/logo-icon.png";
 
 const Footer = () => (
   <footer className="border-t bg-muted/30 py-12">
     <div className="container">
       <div className="grid gap-8 sm:grid-cols-3">
         <div>
-          <div className="flex items-center gap-2">
-            <img src={logo} alt="DroneHire" className="h-7 w-auto" />
-            <h3 className="font-heading text-lg font-bold text-foreground">DroneHire</h3>
+          <div className="flex items-center gap-2.5">
+            <img src={logoIcon} alt="DroneHire" className="h-8 w-8 object-contain" />
+            <h3 className="font-heading text-lg font-bold text-foreground">
+              drone<span className="text-primary">hire</span>
+            </h3>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
             Malaysia's trusted directory for CAAM-certified drone professionals.
