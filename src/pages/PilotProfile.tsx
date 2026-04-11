@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import PilotAvatar from "@/components/PilotAvatar";
 import { MapPin, ShieldCheck, ArrowLeft, Globe, Instagram, Youtube, Facebook } from "lucide-react";
 
-const getInitials = (name: string) =>
-  name.split(" ").map((n) => n[0]).join("").toUpperCase();
+
+
 
 const PilotProfile = () => {
   const { id } = useParams<{ id: string }>();
