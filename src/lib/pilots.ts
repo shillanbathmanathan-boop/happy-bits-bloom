@@ -80,6 +80,21 @@ export function addPilot(pilot: Omit<Pilot, "id">): Pilot {
   return newPilot;
 }
 
+export function normalizeWhatsappNumber(input: string): string {
+  const digits = input.replace(/\D/g, "");
+
+  if (!digits) return "";
+  if (digits.startsWith("60")) return digits;
+  if (digits.startsWith("0")) return `6${digits}`;
+
+  return digits;
+}
+
+export function getWhatsappUrl(input: string): string {
+  const normalized = normalizeWhatsappNumber(input);
+  return `https://api.whatsapp.com/send?phone=${normalized}`;
+}
+
 export function getPilotById(id: string): Pilot | undefined {
   return getPilots().find((p) => p.id === id);
 }
