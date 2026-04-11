@@ -47,6 +47,7 @@ export const LOCATIONS = [
   "Labuan"
 ];
 
+// Fetch all pilots
 export const getPilots = async (): Promise<Pilot[]> => {
   try {
     const { data, error } = await supabase
@@ -59,6 +60,23 @@ export const getPilots = async (): Promise<Pilot[]> => {
   } catch (err) {
     console.error("Error fetching pilots:", err);
     return [];
+  }
+};
+
+// ADDED THIS BACK: Fetch a single pilot by ID
+export const getPilotById = async (id: string): Promise<Pilot | null> => {
+  try {
+    const { data, error } = await supabase
+      .from('pilots')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data as Pilot;
+  } catch (err) {
+    console.error("Error fetching pilot by ID:", err);
+    return null;
   }
 };
 
