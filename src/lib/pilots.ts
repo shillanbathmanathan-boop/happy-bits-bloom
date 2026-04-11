@@ -1,6 +1,7 @@
 export interface Pilot {
   id: string;
   name: string;
+  profilePhoto?: string; // base64 data URL
   location: string;
   specialties: string[];
   whatsapp: string;

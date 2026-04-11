@@ -4,19 +4,15 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import PilotAvatar from "@/components/PilotAvatar";
 import type { Pilot } from "@/lib/pilots";
-
-const getInitials = (name: string) =>
-  name.split(" ").map((n) => n[0]).join("").toUpperCase();
 
 const PilotCard = ({ pilot }: { pilot: Pilot }) => (
   <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 300 }}>
     <Card className="group overflow-hidden transition-shadow hover:shadow-xl">
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 font-heading text-lg font-bold text-primary ring-2 ring-primary/20">
-            {getInitials(pilot.name)}
-          </div>
+          <PilotAvatar name={pilot.name} profilePhoto={pilot.profilePhoto} size="sm" />
           <div className="min-w-0 flex-1">
             <h3 className="font-heading text-lg font-semibold text-foreground">{pilot.name}</h3>
             <p className="flex items-center gap-1 text-sm text-muted-foreground">
