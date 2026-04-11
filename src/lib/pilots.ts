@@ -92,7 +92,7 @@ export function normalizeWhatsappNumber(input: string): string {
 
 export function getWhatsappUrl(input: string): string {
   const normalized = normalizeWhatsappNumber(input);
-  return `https://api.whatsapp.com/send?phone=${normalized}`;
+  return `https://wa.me/${normalized}`;
 }
 
 export function getPilotById(id: string): Pilot | undefined {
