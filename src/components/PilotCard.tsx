@@ -1,4 +1,4 @@
-import { MapPin, ShieldCheck } from "lucide-react";
+import { MapPin, ShieldCheck, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +12,17 @@ const PilotCard = ({ pilot }: { pilot: Pilot }) => (
     <Card className="group overflow-hidden transition-shadow hover:shadow-xl">
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
-          <PilotAvatar name={pilot.name} profilePhoto={pilot.profilePhoto} size="sm" />
+          <div className="relative">
+            <PilotAvatar name={pilot.name} profilePhoto={pilot.profilePhoto} size="sm" />
+            {pilot.available !== undefined && (
+              <span
+                className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${
+                  pilot.available ? "bg-accent" : "bg-muted-foreground/40"
+                }`}
+                title={pilot.available ? "Available" : "Busy"}
+              />
+            )}
+          </div>
           <div className="min-w-0 flex-1">
             <h3 className="font-heading text-lg font-semibold text-foreground">{pilot.name}</h3>
             <p className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -21,10 +31,27 @@ const PilotCard = ({ pilot }: { pilot: Pilot }) => (
           </div>
         </div>
 
-        {pilot.caamVerified && (
-          <Badge className="mt-3 bg-accent text-accent-foreground hover:bg-accent/90">
-            <ShieldCheck className="mr-1 h-3.5 w-3.5" /> CAAM Verified
-          </Badge>
+        <div className="mt-3 flex items-center gap-3">
+          {pilot.caamVerified && (
+            <Badge className="bg-accent text-accent-foreground hover:bg-accent/90">
+              <ShieldCheck className="mr-1 h-3.5 w-3.5" /> CAAM Verified
+            </Badge>
+          )}
+          {pilot.rating && (
+            <div className="flex items-center gap-1 text-sm">
+              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+              <span className="font-medium text-foreground">{pilot.rating}</span>
+              {pilot.reviewCount && (
+                <span className="text-muted-foreground">({pilot.reviewCount})</span>
+              )}
+            </div>
+          )}
+        </div>
+
+        {pilot.available !== undefined && (
+          <p className={`mt-2 text-xs font-medium ${pilot.available ? "text-accent" : "text-muted-foreground"}`}>
+            {pilot.available ? "● Available now" : "● Currently busy"}
+          </p>
         )}
 
         <div className="mt-3 flex flex-wrap gap-1.5">

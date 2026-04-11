@@ -1,7 +1,7 @@
 export interface Pilot {
   id: string;
   name: string;
-  profilePhoto?: string; // base64 data URL
+  profilePhoto?: string;
   location: string;
   specialties: string[];
   whatsapp: string;
@@ -10,6 +10,9 @@ export interface Pilot {
   equipment?: string[];
   description?: string;
   website?: string;
+  rating?: number;
+  reviewCount?: number;
+  available?: boolean;
   socialMedia?: {
     facebook?: string;
     instagram?: string;
@@ -32,6 +35,9 @@ const defaultPilots: Pilot[] = [
     equipment: ["DJI Mavic 3 Enterprise", "DJI Matrice 300 RTK"],
     description: "Experienced drone pilot with 5+ years in industrial inspections and mapping. Specializing in high-precision surveys for construction and agriculture.",
     website: "https://ahmadzulkar.com",
+    rating: 4.9,
+    reviewCount: 23,
+    available: true,
     socialMedia: { instagram: "ahmadzulkar_drones" },
   },
   {
@@ -44,6 +50,9 @@ const defaultPilots: Pilot[] = [
     certificationNumber: "CAAM-2024-015",
     equipment: ["DJI Agras T30", "DJI Phantom 4 RTK"],
     description: "Precision agriculture specialist helping farmers optimize crop yields through drone-based analysis and spraying services.",
+    rating: 4.8,
+    reviewCount: 17,
+    available: true,
   },
   {
     id: "3",
@@ -55,6 +64,9 @@ const defaultPilots: Pilot[] = [
     certificationNumber: "CAAM-2023-042",
     equipment: ["DJI Inspire 3", "DJI Mini 4 Pro"],
     description: "Cinematic drone videographer creating stunning aerial content for real estate, events, and commercials.",
+    rating: 5.0,
+    reviewCount: 31,
+    available: false,
     socialMedia: { youtube: "RajKumarAerials", instagram: "rajkumar.drones" },
   },
 ];
