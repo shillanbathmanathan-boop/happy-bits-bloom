@@ -122,6 +122,18 @@ const Register = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+            {/* Profile Photo */}
+            <div className="flex flex-col items-center gap-3">
+              <div className="relative cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                <PilotAvatar name={name || "Your Name"} profilePhoto={profilePhoto} size="lg" />
+                <div className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
+                  <Camera className="h-4 w-4" />
+                </div>
+              </div>
+              <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
+              <p className="text-xs text-muted-foreground">Click to upload profile photo (max 2MB)</p>
+            </div>
+
             {/* Basic Info */}
             <div>
               <Label htmlFor="name">Full Name *</Label>
