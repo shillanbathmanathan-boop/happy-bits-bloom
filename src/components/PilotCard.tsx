@@ -44,9 +44,14 @@ const PilotCard = ({ pilot }: { pilot: Pilot }) => {
           {/* Badges & Rating */}
           <div className="mt-3 flex items-center gap-3">
             {pilot.caamVerified && (
-              <Badge className="bg-accent text-accent-foreground hover:bg-accent/90">
-                <ShieldCheck className="mr-1 h-3.5 w-3.5" /> CAAM Verified
-              </Badge>
+              <div className="flex items-center gap-1.5">
+                <Badge className="bg-amber-500 text-white hover:bg-amber-600">
+                  <ShieldCheck className="mr-1 h-3.5 w-3.5" /> CAAM Verified
+                </Badge>
+                {pilot.certificationNumber && (
+                  <span className="text-xs font-medium text-muted-foreground">#{pilot.certificationNumber}</span>
+                )}
+              </div>
             )}
             {pilot.rating && (
               <div className="flex items-center gap-1 text-sm">

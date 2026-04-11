@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { addPilot, SPECIALTIES, LOCATIONS, normalizeWhatsappNumber } from "@/lib/pilots";
 import { toast } from "sonner";
-import { Plus, X, Camera } from "lucide-react";
+import { Plus, X, Camera, Upload, FileCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import PilotAvatar from "@/components/PilotAvatar";
 
@@ -23,6 +23,9 @@ const Register = () => {
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
   const [caamVerified, setCaamVerified] = useState(false);
   const [certificationNumber, setCertificationNumber] = useState("");
+  const [certificateFile, setCertificateFile] = useState<string | undefined>();
+  const [certificateFileName, setCertificateFileName] = useState("");
+  const certFileInputRef = useRef<HTMLInputElement>(null);
   const [equipment, setEquipment] = useState<string[]>([]);
   const [equipmentInput, setEquipmentInput] = useState("");
   const [description, setDescription] = useState("");
@@ -89,6 +92,11 @@ const Register = () => {
       return;
     }
 
+    if (caamVerified && !certificateFile) {
+      toast.error("Please upload your CAAM certificate file.");
+      return;
+    }
+
     const socialMedia: { facebook?: string; instagram?: string; youtube?: string; tiktok?: string } = {};
     if (facebook.trim()) socialMedia.facebook = facebook.trim();
     if (instagram.trim()) socialMedia.instagram = instagram.trim();
@@ -103,6 +111,7 @@ const Register = () => {
       specialties: selectedSpecialties,
       caamVerified,
       certificationNumber: caamVerified ? certificationNumber.trim() : undefined,
+      certificateFile: caamVerified ? certificateFile : undefined,
       equipment: equipment.length > 0 ? equipment : undefined,
       description: description.trim() || undefined,
       website: website.trim() || undefined,
@@ -191,15 +200,58 @@ const Register = () => {
                 I have a valid CAAM Remote Operator Certificate
               </label>
               {caamVerified && (
-                <div>
-                  <Label htmlFor="certNumber">Certification Number *</Label>
-                  <Input
-                    id="certNumber"
-                    value={certificationNumber}
-                    onChange={(e) => setCertificationNumber(e.target.value)}
-                    placeholder="e.g. CAAM-2024-001"
-                    maxLength={50}
-                  />
+                <div className="space-y-3">
+                  <div>
+                    <Label htmlFor="certNumber">Certification Number *</Label>
+                    <Input
+                      id="certNumber"
+                      value={certificationNumber}
+                      onChange={(e) => setCertificationNumber(e.target.value)}
+                      placeholder="e.g. CAAM-2024-001"
+                      maxLength={50}
+                    />
+                  </div>
+                  <div>
+                    <Label>Upload Certificate *</Label>
+                    <p className="mb-2 text-xs text-muted-foreground">Upload your CAAM certificate (PDF, JPG, PNG — max 2MB)</p>
+                    <input
+                      ref={certFileInputRef}
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        if (file.size > 2 * 1024 * 1024) {
+                          toast.error("Certificate file must be under 2MB.");
+                          return;
+                        }
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setCertificateFile(reader.result as string);
+                          setCertificateFileName(file.name);
+                        };
+                        reader.readAsDataURL(file);
+                      }}
+                    />
+                    {certificateFile ? (
+                      <div className="flex items-center gap-2 rounded-md border border-primary/30 bg-primary/5 px-3 py-2">
+                        <FileCheck className="h-4 w-4 text-primary" />
+                        <span className="flex-1 truncate text-sm text-foreground">{certificateFileName}</span>
+                        <button
+                          type="button"
+                          onClick={() => { setCertificateFile(undefined); setCertificateFileName(""); }}
+                          className="rounded-full p-0.5 hover:bg-muted-foreground/20"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ) : (
+                      <Button type="button" variant="outline" className="w-full" onClick={() => certFileInputRef.current?.click()}>
+                        <Upload className="mr-2 h-4 w-4" /> Choose File
+                      </Button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
