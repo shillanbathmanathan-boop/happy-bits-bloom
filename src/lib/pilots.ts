@@ -50,31 +50,37 @@ export const LOCATIONS = [
 ];
 
 // 3. Database Functions
-export const getPilots = async (): Promise<Pilot[]> => {
-  const { data, error } = await supabase
-    .from('pilots')
-    .select('*')
-    .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error("Error fetching pilots:", error);
+export const getPilots = async (): Promise<Pilot[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('pilots')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    // CRITICAL FIX: Ensure we always return an array to prevent .slice errors
+    return (data as Pilot[]) || [];
+  } catch (err) {
+    console.error("Error fetching pilots:", err);
     return [];
   }
-  return data as Pilot[];
 };
 
 export const getPilotById = async (id: string): Promise<Pilot | null> => {
-  const { data, error } = await supabase
-    .from('pilots')
-    .select('*')
-    .eq('id', id)
-    .single();
+  try {
+    const { data, error } = await supabase
+      .from('pilots')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-  if (error) {
-    console.error("Error fetching pilot by ID:", error);
+    if (error) throw error;
+    return data as Pilot;
+  } catch (err) {
+    console.error("Error fetching pilot by ID:", err);
     return null;
   }
-  return data as Pilot;
 };
 
 export const addPilot = async (pilotData: Partial<Pilot>) => {
@@ -87,17 +93,20 @@ export const addPilot = async (pilotData: Partial<Pilot>) => {
     console.error("Error adding pilot:", error);
     return null;
   }
-  return data[0];
+  return data ? data[0] : null;
 };
 
-// 4. Helper Functions (Fixes both Register.tsx and PilotCard.tsx)
+// 4. Helper Functions
 export function normalizeWhatsappNumber(input: string): string {
+  if (!input) return "";
   const digits = input.replace(/\D/g, "");
-  // Ensures it starts with '60' for Malaysia
-  return digits.startsWith("60") ? digits : `60${digits.startsWith("0") ? digits.slice(1) : digits}`;
+  // Standard Malaysian format: 601xxxxxxx
+  if (digits.startsWith("60")) return digits;
+  if (digits.startsWith("0")) return `6${digits}`;
+  return `60${digits}`;
 }
 
 export function getWhatsappUrl(input: string): string {
   const normalized = normalizeWhatsappNumber(input);
-  return `https://wa.me/${normalized}`;
+  return normalized ? `https://wa.me/${normalized}` : "#";
 }
