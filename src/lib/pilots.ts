@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-// 1. Define the TypeScript interface to keep the data structured
+// 1. Data Structure
 export interface Pilot {
   id?: string;
   name: string;
@@ -18,7 +18,38 @@ export interface Pilot {
   available?: boolean;
 }
 
-// 2. Fetch all pilots from the cloud
+// 2. Filter Constants (Re-added to fix the build error)
+export const SPECIALTIES = [
+  "Aerial Photography",
+  "Videography",
+  "Agricultural Spraying",
+  "Mapping & Surveying",
+  "Infrastructure Inspection",
+  "Real Estate",
+  "Events",
+  "Search & Rescue"
+];
+
+export const LOCATIONS = [
+  "Kuala Lumpur",
+  "Selangor",
+  "Penang",
+  "Johor",
+  "Perak",
+  "Melaka",
+  "Negeri Sembilan",
+  "Pahang",
+  "Terengganu",
+  "Kelantan",
+  "Kedah",
+  "Perlis",
+  "Sabah",
+  "Sarawak",
+  "Putrajaya",
+  "Labuan"
+];
+
+// 3. Database Functions
 export const getPilots = async (): Promise<Pilot[]> => {
   const { data, error } = await supabase
     .from('pilots')
@@ -32,7 +63,6 @@ export const getPilots = async (): Promise<Pilot[]> => {
   return data as Pilot[];
 };
 
-// 3. Register a new pilot
 export const addPilot = async (pilotData: Partial<Pilot>) => {
   const { data, error } = await supabase
     .from('pilots')
@@ -46,13 +76,9 @@ export const addPilot = async (pilotData: Partial<Pilot>) => {
   return data[0];
 };
 
-// 4. THE FIX: Add the missing helper function required by PilotCard.tsx
+// 4. Helper Functions
 export function getWhatsappUrl(input: string): string {
-  // Removes all non-digit characters
   const digits = input.replace(/\D/g, "");
-  
-  // Ensures it starts with '60' for Malaysia if it doesn't already
   const normalized = digits.startsWith("60") ? digits : `6${digits}`;
-  
   return `https://wa.me/${normalized}`;
 }
