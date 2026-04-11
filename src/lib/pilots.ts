@@ -16,7 +16,6 @@ export interface Pilot {
     youtube?: string;
     tiktok?: string;
   };
-  };
 }
 
 const STORAGE_KEY = "dronehire_pilots";
