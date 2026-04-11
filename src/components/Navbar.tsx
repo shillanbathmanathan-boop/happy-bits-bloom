@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -15,9 +16,9 @@ const Navbar = () => {
 
         {/* Desktop */}
         <div className="hidden items-center gap-6 md:flex">
-          <Link to="/" className="text-sm font-medium text-foreground hover:text-primary">Home</Link>
-          <Link to="/pilots" className="text-sm font-medium text-foreground hover:text-primary">Find Pilots</Link>
-          <Link to="/register" className="text-sm font-medium text-foreground hover:text-primary">Get Listed</Link>
+          <Link to="/" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Home</Link>
+          <Link to="/pilots" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Find Pilots</Link>
+          <Link to="/register" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Get Listed</Link>
           <Button asChild size="sm">
             <Link to="/register">List Your Service</Link>
           </Button>
@@ -30,18 +31,26 @@ const Navbar = () => {
       </div>
 
       {/* Mobile menu */}
-      {open && (
-        <div className="border-t bg-background px-4 pb-4 md:hidden">
-          <div className="flex flex-col gap-3 pt-3">
-            <Link to="/" onClick={() => setOpen(false)} className="text-sm font-medium">Home</Link>
-            <Link to="/pilots" onClick={() => setOpen(false)} className="text-sm font-medium">Find Pilots</Link>
-            <Link to="/register" onClick={() => setOpen(false)} className="text-sm font-medium">Get Listed</Link>
-            <Button asChild size="sm">
-              <Link to="/register" onClick={() => setOpen(false)}>List Your Service</Link>
-            </Button>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="border-t bg-background px-4 pb-4 md:hidden overflow-hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+          >
+            <div className="flex flex-col gap-3 pt-3">
+              <Link to="/" onClick={() => setOpen(false)} className="text-sm font-medium">Home</Link>
+              <Link to="/pilots" onClick={() => setOpen(false)} className="text-sm font-medium">Find Pilots</Link>
+              <Link to="/register" onClick={() => setOpen(false)} className="text-sm font-medium">Get Listed</Link>
+              <Button asChild size="sm">
+                <Link to="/register" onClick={() => setOpen(false)}>List Your Service</Link>
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
