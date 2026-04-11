@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { getPilotById } from "@/lib/pilots";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, ShieldCheck, ArrowLeft } from "lucide-react";
+import { MapPin, ShieldCheck, ArrowLeft, Globe, Instagram, Youtube, Facebook } from "lucide-react";
 
 const getInitials = (name: string) =>
   name.split(" ").map((n) => n[0]).join("").toUpperCase();
@@ -53,9 +53,21 @@ const PilotProfile = () => {
             </div>
 
             {pilot.caamVerified && (
-              <Badge className="mt-4 bg-accent text-accent-foreground hover:bg-accent/90">
-                <ShieldCheck className="mr-1 h-3.5 w-3.5" /> CAAM Verified
-              </Badge>
+              <div className="mt-4 flex items-center gap-2">
+                <Badge className="bg-accent text-accent-foreground hover:bg-accent/90">
+                  <ShieldCheck className="mr-1 h-3.5 w-3.5" /> CAAM Verified
+                </Badge>
+                {pilot.certificationNumber && (
+                  <span className="text-xs text-muted-foreground">#{pilot.certificationNumber}</span>
+                )}
+              </div>
+            )}
+
+            {pilot.description && (
+              <div className="mt-6">
+                <h2 className="font-heading text-sm font-semibold text-foreground">About</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{pilot.description}</p>
+              </div>
             )}
 
             <div className="mt-6">
@@ -66,6 +78,46 @@ const PilotProfile = () => {
                 ))}
               </div>
             </div>
+
+            {pilot.equipment && pilot.equipment.length > 0 && (
+              <div className="mt-6">
+                <h2 className="font-heading text-sm font-semibold text-foreground">Equipment</h2>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {pilot.equipment.map((e) => (
+                    <Badge key={e} variant="outline">{e}</Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Website & Social */}
+            {(pilot.website || pilot.socialMedia) && (
+              <div className="mt-6">
+                <h2 className="font-heading text-sm font-semibold text-foreground">Online</h2>
+                <div className="mt-2 flex flex-wrap gap-3">
+                  {pilot.website && (
+                    <a href={pilot.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-primary hover:underline">
+                      <Globe className="h-4 w-4" /> Website
+                    </a>
+                  )}
+                  {pilot.socialMedia?.facebook && (
+                    <a href={`https://facebook.com/${pilot.socialMedia.facebook}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-primary hover:underline">
+                      <Facebook className="h-4 w-4" /> Facebook
+                    </a>
+                  )}
+                  {pilot.socialMedia?.instagram && (
+                    <a href={`https://instagram.com/${pilot.socialMedia.instagram}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-primary hover:underline">
+                      <Instagram className="h-4 w-4" /> Instagram
+                    </a>
+                  )}
+                  {pilot.socialMedia?.youtube && (
+                    <a href={`https://youtube.com/@${pilot.socialMedia.youtube}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-primary hover:underline">
+                      <Youtube className="h-4 w-4" /> YouTube
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
 
             <Button className="mt-8 w-full bg-[#25D366] hover:bg-[#128C7E] text-white border-0" size="lg" asChild>
               <a href={`https://wa.me/${pilot.whatsapp}`} target="_blank" rel="noopener noreferrer">

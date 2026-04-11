@@ -6,25 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { addPilot } from "@/lib/pilots";
+import { Textarea } from "@/components/ui/textarea";
+import { addPilot, SPECIALTIES, LOCATIONS } from "@/lib/pilots";
 import { toast } from "sonner";
-
-const SPECIALTIES = [
-  "Roof Inspection",
-  "Mapping & Survey",
-  "Agriculture",
-  "Real Estate",
-  "Film & Media",
-  "Construction",
-  "Infrastructure",
-  "Environmental",
-];
-
-const LOCATIONS = [
-  "Kuala Lumpur", "Selangor", "Penang", "Johor", "Perak",
-  "Sabah", "Sarawak", "Melaka", "Kedah", "Kelantan",
-  "Pahang", "Terengganu", "Negeri Sembilan", "Perlis", "Putrajaya",
-];
+import { Plus, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -33,11 +19,31 @@ const Register = () => {
   const [whatsapp, setWhatsapp] = useState("");
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
   const [caamVerified, setCaamVerified] = useState(false);
+  const [certificationNumber, setCertificationNumber] = useState("");
+  const [equipment, setEquipment] = useState<string[]>([]);
+  const [equipmentInput, setEquipmentInput] = useState("");
+  const [description, setDescription] = useState("");
+  const [website, setWebsite] = useState("");
+  const [facebook, setFacebook] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [youtube, setYoutube] = useState("");
 
   const toggleSpecialty = (s: string) => {
     setSelectedSpecialties((prev) =>
       prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]
     );
+  };
+
+  const addEquipment = () => {
+    const trimmed = equipmentInput.trim();
+    if (trimmed && !equipment.includes(trimmed)) {
+      setEquipment((prev) => [...prev, trimmed]);
+      setEquipmentInput("");
+    }
+  };
+
+  const removeEquipment = (item: string) => {
+    setEquipment((prev) => prev.filter((e) => e !== item));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,12 +54,27 @@ const Register = () => {
       return;
     }
 
+    if (caamVerified && !certificationNumber.trim()) {
+      toast.error("Please enter your CAAM certification number.");
+      return;
+    }
+
+    const socialMedia: { facebook?: string; instagram?: string; youtube?: string } = {};
+    if (facebook.trim()) socialMedia.facebook = facebook.trim();
+    if (instagram.trim()) socialMedia.instagram = instagram.trim();
+    if (youtube.trim()) socialMedia.youtube = youtube.trim();
+
     addPilot({
       name: name.trim(),
       location,
       whatsapp: whatsapp.trim().replace(/[^0-9]/g, ""),
       specialties: selectedSpecialties,
       caamVerified,
+      certificationNumber: caamVerified ? certificationNumber.trim() : undefined,
+      equipment: equipment.length > 0 ? equipment : undefined,
+      description: description.trim() || undefined,
+      website: website.trim() || undefined,
+      socialMedia: Object.keys(socialMedia).length > 0 ? socialMedia : undefined,
     });
 
     toast.success("Your profile has been listed!");
@@ -71,16 +92,10 @@ const Register = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+            {/* Basic Info */}
             <div>
               <Label htmlFor="name">Full Name *</Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Ahmad Zulkar"
-                maxLength={100}
-                required
-              />
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Ahmad Zulkar" maxLength={100} required />
             </div>
 
             <div>
@@ -101,17 +116,11 @@ const Register = () => {
 
             <div>
               <Label htmlFor="whatsapp">WhatsApp Number *</Label>
-              <Input
-                id="whatsapp"
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
-                placeholder="e.g. 60123456789"
-                maxLength={15}
-                required
-              />
+              <Input id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="e.g. 60123456789" maxLength={15} required />
               <p className="mt-1 text-xs text-muted-foreground">Include country code (e.g. 60 for Malaysia)</p>
             </div>
 
+            {/* Specialties */}
             <div>
               <Label>Specialties *</Label>
               <div className="mt-2 grid grid-cols-2 gap-2">
@@ -124,23 +133,95 @@ const Register = () => {
                         : "border-input text-muted-foreground hover:border-primary/50"
                     }`}
                   >
-                    <Checkbox
-                      checked={selectedSpecialties.includes(s)}
-                      onCheckedChange={() => toggleSpecialty(s)}
-                    />
+                    <Checkbox checked={selectedSpecialties.includes(s)} onCheckedChange={() => toggleSpecialty(s)} />
                     {s}
                   </label>
                 ))}
               </div>
             </div>
 
-            <label className="flex items-center gap-2 text-sm">
-              <Checkbox
-                checked={caamVerified}
-                onCheckedChange={(checked) => setCaamVerified(checked === true)}
+            {/* CAAM Certification */}
+            <div className="space-y-3 rounded-lg border border-input p-4">
+              <label className="flex items-center gap-2 text-sm font-medium">
+                <Checkbox checked={caamVerified} onCheckedChange={(checked) => setCaamVerified(checked === true)} />
+                I have a valid CAAM Remote Operator Certificate
+              </label>
+              {caamVerified && (
+                <div>
+                  <Label htmlFor="certNumber">Certification Number *</Label>
+                  <Input
+                    id="certNumber"
+                    value={certificationNumber}
+                    onChange={(e) => setCertificationNumber(e.target.value)}
+                    placeholder="e.g. CAAM-2024-001"
+                    maxLength={50}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Equipment */}
+            <div>
+              <Label>Equipment / Drones</Label>
+              <div className="mt-2 flex gap-2">
+                <Input
+                  value={equipmentInput}
+                  onChange={(e) => setEquipmentInput(e.target.value)}
+                  placeholder="e.g. DJI Mavic 3 Enterprise"
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addEquipment(); } }}
+                />
+                <Button type="button" variant="outline" size="icon" onClick={addEquipment}>
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+              {equipment.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {equipment.map((item) => (
+                    <Badge key={item} variant="secondary" className="gap-1 pr-1">
+                      {item}
+                      <button type="button" onClick={() => removeEquipment(item)} className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20">
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Description */}
+            <div>
+              <Label htmlFor="description">About You</Label>
+              <Textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Tell clients about your experience, services, and what makes you stand out..."
+                maxLength={500}
+                rows={4}
               />
-              I have a valid CAAM Remote Operator Certificate
-            </label>
+              <p className="mt-1 text-xs text-muted-foreground">{description.length}/500 characters</p>
+            </div>
+
+            {/* Website & Social Media */}
+            <div className="space-y-3">
+              <Label className="text-base">Online Presence</Label>
+              <div>
+                <Label htmlFor="website" className="text-xs text-muted-foreground">Website</Label>
+                <Input id="website" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://yourwebsite.com" maxLength={200} />
+              </div>
+              <div>
+                <Label htmlFor="facebook" className="text-xs text-muted-foreground">Facebook</Label>
+                <Input id="facebook" value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="Facebook profile or page URL" maxLength={200} />
+              </div>
+              <div>
+                <Label htmlFor="instagram" className="text-xs text-muted-foreground">Instagram</Label>
+                <Input id="instagram" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="Instagram username" maxLength={100} />
+              </div>
+              <div>
+                <Label htmlFor="youtube" className="text-xs text-muted-foreground">YouTube</Label>
+                <Input id="youtube" value={youtube} onChange={(e) => setYoutube(e.target.value)} placeholder="YouTube channel name or URL" maxLength={200} />
+              </div>
+            </div>
 
             <Button type="submit" size="lg" className="w-full">
               Submit & Get Listed
