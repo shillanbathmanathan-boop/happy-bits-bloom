@@ -95,6 +95,7 @@ const Register = () => {
 
     addPilot({
       name: name.trim(),
+      profilePhoto,
       location,
       whatsapp: whatsapp.trim().replace(/[^0-9]/g, ""),
       specialties: selectedSpecialties,
