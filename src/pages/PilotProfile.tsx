@@ -52,12 +52,22 @@ const PilotProfile = () => {
             </div>
 
             {pilot.caamVerified && (
-              <div className="mt-4 flex items-center gap-2">
-                <Badge className="bg-accent text-accent-foreground hover:bg-accent/90">
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <Badge className="bg-amber-500 text-white hover:bg-amber-600">
                   <ShieldCheck className="mr-1 h-3.5 w-3.5" /> CAAM Verified
                 </Badge>
                 {pilot.certificationNumber && (
-                  <span className="text-xs text-muted-foreground">#{pilot.certificationNumber}</span>
+                  <span className="text-sm font-medium text-foreground">#{pilot.certificationNumber}</span>
+                )}
+                {pilot.certificateFile && (
+                  <a
+                    href={pilot.certificateFile}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-primary hover:underline"
+                  >
+                    View Certificate
+                  </a>
                 )}
               </div>
             )}

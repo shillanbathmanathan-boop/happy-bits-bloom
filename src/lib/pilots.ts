@@ -7,6 +7,7 @@ export interface Pilot {
   whatsapp: string;
   caamVerified: boolean;
   certificationNumber?: string;
+  certificateFile?: string; // base64 data URL of uploaded certificate
   equipment?: string[];
   description?: string;
   website?: string;
