@@ -50,8 +50,6 @@ export const LOCATIONS = [
 ];
 
 // 3. Database Functions
-
-// Fetch all pilots
 export const getPilots = async (): Promise<Pilot[]> => {
   const { data, error } = await supabase
     .from('pilots')
@@ -65,7 +63,6 @@ export const getPilots = async (): Promise<Pilot[]> => {
   return data as Pilot[];
 };
 
-// NEW: Fetch a single pilot by ID (Fixes PilotProfile.tsx error)
 export const getPilotById = async (id: string): Promise<Pilot | null> => {
   const { data, error } = await supabase
     .from('pilots')
@@ -80,7 +77,6 @@ export const getPilotById = async (id: string): Promise<Pilot | null> => {
   return data as Pilot;
 };
 
-// Register a new pilot
 export const addPilot = async (pilotData: Partial<Pilot>) => {
   const { data, error } = await supabase
     .from('pilots')
@@ -94,9 +90,14 @@ export const addPilot = async (pilotData: Partial<Pilot>) => {
   return data[0];
 };
 
-// 4. Helper Functions
-export function getWhatsappUrl(input: string): string {
+// 4. Helper Functions (Fixes both Register.tsx and PilotCard.tsx)
+export function normalizeWhatsappNumber(input: string): string {
   const digits = input.replace(/\D/g, "");
-  const normalized = digits.startsWith("60") ? digits : `6${digits}`;
+  // Ensures it starts with '60' for Malaysia
+  return digits.startsWith("60") ? digits : `60${digits.startsWith("0") ? digits.slice(1) : digits}`;
+}
+
+export function getWhatsappUrl(input: string): string {
+  const normalized = normalizeWhatsappNumber(input);
   return `https://wa.me/${normalized}`;
 }
