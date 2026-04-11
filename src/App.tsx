@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Pilots from "./pages/Pilots";
 import PilotProfile from "./pages/PilotProfile";
 import Register from "./pages/Register";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/pilots" element={<Pilots />} />
           <Route path="/pilot/:id" element={<PilotProfile />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

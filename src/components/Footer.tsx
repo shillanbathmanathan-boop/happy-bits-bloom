@@ -21,7 +21,7 @@ const Footer = () => (
           <h4 className="font-heading text-sm font-semibold text-foreground">Resources</h4>
           <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
             <li><a href="https://www.caam.gov.my" target="_blank" rel="noopener noreferrer" className="hover:text-foreground">Safety Regulations (CAAM)</a></li>
-            <li><span className="cursor-default">Terms of Service</span></li>
+            <li><Link to="/terms" className="hover:text-foreground">Terms of Service</Link></li>
             <li><span className="cursor-default">Contact Support</span></li>
           </ul>
         </div>

@@ -30,6 +30,7 @@ const Register = () => {
   const [facebook, setFacebook] = useState("");
   const [instagram, setInstagram] = useState("");
   const [youtube, setYoutube] = useState("");
+  const [tiktok, setTiktok] = useState("");
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -88,10 +89,11 @@ const Register = () => {
       return;
     }
 
-    const socialMedia: { facebook?: string; instagram?: string; youtube?: string } = {};
+    const socialMedia: { facebook?: string; instagram?: string; youtube?: string; tiktok?: string } = {};
     if (facebook.trim()) socialMedia.facebook = facebook.trim();
     if (instagram.trim()) socialMedia.instagram = instagram.trim();
     if (youtube.trim()) socialMedia.youtube = youtube.trim();
+    if (tiktok.trim()) socialMedia.tiktok = tiktok.trim();
 
     addPilot({
       name: name.trim(),
@@ -262,6 +264,10 @@ const Register = () => {
               <div>
                 <Label htmlFor="youtube" className="text-xs text-muted-foreground">YouTube</Label>
                 <Input id="youtube" value={youtube} onChange={(e) => setYoutube(e.target.value)} placeholder="YouTube channel name or URL" maxLength={200} />
+              </div>
+              <div>
+                <Label htmlFor="tiktok" className="text-xs text-muted-foreground">TikTok</Label>
+                <Input id="tiktok" value={tiktok} onChange={(e) => setTiktok(e.target.value)} placeholder="TikTok username" maxLength={100} />
               </div>
             </div>
 
