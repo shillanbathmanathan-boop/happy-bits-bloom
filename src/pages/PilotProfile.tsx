@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { getPilotById } from "@/lib/pilots";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import PilotAvatar from "@/components/PilotAvatar";
 import { MapPin, ShieldCheck, ArrowLeft, Globe, Instagram, Youtube, Facebook } from "lucide-react";
 
 const getInitials = (name: string) =>
@@ -41,9 +42,7 @@ const PilotProfile = () => {
 
           <div className="rounded-lg border bg-card p-8">
             <div className="flex items-center gap-5">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-muted font-heading text-2xl font-bold text-primary">
-                {getInitials(pilot.name)}
-              </div>
+              <PilotAvatar name={pilot.name} profilePhoto={pilot.profilePhoto} size="md" />
               <div>
                 <h1 className="font-heading text-2xl font-bold text-foreground">{pilot.name}</h1>
                 <p className="mt-1 flex items-center gap-1 text-muted-foreground">
