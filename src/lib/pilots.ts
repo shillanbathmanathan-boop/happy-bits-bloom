@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
+// 1. Data Structure
 export interface Pilot {
   id?: string;
   name: string;
@@ -17,6 +18,7 @@ export interface Pilot {
   available?: boolean;
 }
 
+// 2. Constants for Dropdowns
 export const SPECIALTIES = [
   "Aerial Photography",
   "Videography",
@@ -47,7 +49,9 @@ export const LOCATIONS = [
   "Labuan"
 ];
 
-// Fetch all pilots
+// 3. Database Functions
+
+// Fetch all pilots (used in Pilots.tsx)
 export const getPilots = async (): Promise<Pilot[]> => {
   try {
     const { data, error } = await supabase
@@ -63,7 +67,7 @@ export const getPilots = async (): Promise<Pilot[]> => {
   }
 };
 
-// ADDED THIS BACK: Fetch a single pilot by ID
+// Fetch a single pilot (used in PilotProfile.tsx)
 export const getPilotById = async (id: string): Promise<Pilot | null> => {
   try {
     const { data, error } = await supabase
@@ -80,9 +84,28 @@ export const getPilotById = async (id: string): Promise<Pilot | null> => {
   }
 };
 
+// Add a new pilot (used in Register.tsx)
+export const addPilot = async (pilotData: Partial<Pilot>) => {
+  try {
+    const { data, error } = await supabase
+      .from('pilots')
+      .insert([pilotData])
+      .select();
+
+    if (error) throw error;
+    return data ? data[0] : null;
+  } catch (err) {
+    console.error("Error adding pilot:", err);
+    return null;
+  }
+};
+
+// 4. Utility Functions
+
 export function normalizeWhatsappNumber(input: string): string {
   if (!input) return "";
   const digits = input.replace(/\D/g, "");
+  // Standard Malaysian format: 601xxxxxxx
   if (digits.startsWith("60")) return digits;
   if (digits.startsWith("0")) return `6${digits}`;
   return `60${digits}`;
