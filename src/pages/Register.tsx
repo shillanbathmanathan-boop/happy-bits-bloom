@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { addPilot, SPECIALTIES, LOCATIONS } from "@/lib/pilots";
+import { addPilot, SPECIALTIES, LOCATIONS, normalizeWhatsappNumber } from "@/lib/pilots";
 import { toast } from "sonner";
 import { Plus, X, Camera } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -99,7 +99,7 @@ const Register = () => {
       name: name.trim(),
       profilePhoto,
       location,
-      whatsapp: whatsapp.trim().replace(/[^0-9]/g, ""),
+      whatsapp: normalizeWhatsappNumber(whatsapp.trim()),
       specialties: selectedSpecialties,
       caamVerified,
       certificationNumber: caamVerified ? certificationNumber.trim() : undefined,

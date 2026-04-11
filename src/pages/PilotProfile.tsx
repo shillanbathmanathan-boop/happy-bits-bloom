@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getPilotById } from "@/lib/pilots";
+import { getPilotById, getWhatsappUrl } from "@/lib/pilots";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import PilotAvatar from "@/components/PilotAvatar";
@@ -125,7 +125,7 @@ const PilotProfile = () => {
             )}
 
             <Button className="mt-8 w-full bg-[#25D366] hover:bg-[#128C7E] text-white border-0" size="lg" asChild>
-              <a href={`https://wa.me/${pilot.whatsapp}`} target="_blank" rel="noopener noreferrer">
+                <a href={getWhatsappUrl(pilot.whatsapp)} target="_blank" rel="noopener noreferrer">
                 Contact via WhatsApp
               </a>
             </Button>

@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import PilotAvatar from "@/components/PilotAvatar";
-import type { Pilot } from "@/lib/pilots";
+import { getWhatsappUrl, type Pilot } from "@/lib/pilots";
 
 const PilotCard = ({ pilot }: { pilot: Pilot }) => (
   <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 300 }}>
@@ -38,7 +38,7 @@ const PilotCard = ({ pilot }: { pilot: Pilot }) => (
             <Link to={`/pilot/${pilot.id}`}>View Profile</Link>
           </Button>
           <Button size="sm" className="flex-1 bg-[#25D366] hover:bg-[#128C7E] text-white border-0" asChild>
-            <a href={`https://wa.me/${pilot.whatsapp}`} target="_blank" rel="noopener noreferrer">
+            <a href={getWhatsappUrl(pilot.whatsapp)} target="_blank" rel="noopener noreferrer">
               WhatsApp
             </a>
           </Button>
