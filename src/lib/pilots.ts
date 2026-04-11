@@ -18,7 +18,7 @@ export interface Pilot {
   available?: boolean;
 }
 
-// 2. Filter Constants (Re-added to fix the build error)
+// 2. Filter Constants
 export const SPECIALTIES = [
   "Aerial Photography",
   "Videography",
@@ -50,6 +50,8 @@ export const LOCATIONS = [
 ];
 
 // 3. Database Functions
+
+// Fetch all pilots
 export const getPilots = async (): Promise<Pilot[]> => {
   const { data, error } = await supabase
     .from('pilots')
@@ -63,6 +65,22 @@ export const getPilots = async (): Promise<Pilot[]> => {
   return data as Pilot[];
 };
 
+// NEW: Fetch a single pilot by ID (Fixes PilotProfile.tsx error)
+export const getPilotById = async (id: string): Promise<Pilot | null> => {
+  const { data, error } = await supabase
+    .from('pilots')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching pilot by ID:", error);
+    return null;
+  }
+  return data as Pilot;
+};
+
+// Register a new pilot
 export const addPilot = async (pilotData: Partial<Pilot>) => {
   const { data, error } = await supabase
     .from('pilots')
