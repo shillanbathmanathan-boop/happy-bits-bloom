@@ -1,29 +1,7 @@
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 
-const testimonials = [
-  {
-    name: "Tan Wei Ming",
-    role: "Property Developer",
-    company: "Meridian Properties",
-    quote: "DroneHire made it incredibly easy to find a certified pilot for our site surveys. The WhatsApp integration meant we could start discussing our project within minutes.",
-    rating: 5,
-  },
-  {
-    name: "Dr. Farah Ibrahim",
-    role: "Agricultural Consultant",
-    company: "AgriTech Solutions",
-    quote: "We needed precise crop mapping across 200 hectares in Kedah. Found the perfect pilot with the right equipment in under a day. Game-changer for our precision farming clients.",
-    rating: 5,
-  },
-  {
-    name: "James Ooi",
-    role: "Film Producer",
-    company: "KL Creative Studios",
-    quote: "The quality of pilots on this platform is outstanding. Every pilot we've hired has been CAAM-certified and delivered stunning aerial footage for our productions.",
-    rating: 5,
-  },
-];
+const testimonials: any[] = [];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
