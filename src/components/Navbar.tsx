@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import ThemeToggle from "@/components/ThemeToggle";
 import logoIcon from "@/assets/logo-icon.png";
 
 const Navbar = () => {
@@ -23,15 +24,19 @@ const Navbar = () => {
           <Link to="/" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Home</Link>
           <Link to="/pilots" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Find Pilots</Link>
           <Link to="/register" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Get Listed</Link>
+          <ThemeToggle />
           <Button asChild size="sm">
             <Link to="/register">List Your Service</Link>
           </Button>
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden" onClick={() => setOpen(!open)}>
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button onClick={() => setOpen(!open)}>
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
