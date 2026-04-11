@@ -3,7 +3,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/logo-clean.png";
+import logoIcon from "@/assets/logo-icon.png";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -11,9 +11,11 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="DroneHire" className="h-8 w-auto" />
-          <span className="font-heading text-xl font-bold text-primary">DroneHire</span>
+        <Link to="/" className="flex items-center gap-2.5">
+          <img src={logoIcon} alt="DroneHire" className="h-9 w-9 object-contain" />
+          <span className="font-heading text-xl font-bold text-foreground">
+            drone<span className="text-primary">hire</span>
+          </span>
         </Link>
 
         {/* Desktop */}
