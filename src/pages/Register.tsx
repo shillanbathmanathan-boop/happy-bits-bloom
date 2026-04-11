@@ -56,9 +56,6 @@ const Register = () => {
     };
     reader.readAsDataURL(file);
   };
-  const [facebook, setFacebook] = useState("");
-  const [instagram, setInstagram] = useState("");
-  const [youtube, setYoutube] = useState("");
 
   const toggleSpecialty = (s: string) => {
     setSelectedSpecialties((prev) =>
