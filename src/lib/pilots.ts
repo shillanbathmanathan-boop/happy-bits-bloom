@@ -14,6 +14,8 @@ export interface Pilot {
     facebook?: string;
     instagram?: string;
     youtube?: string;
+    tiktok?: string;
+  };
   };
 }
 
