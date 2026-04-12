@@ -22,52 +22,79 @@ export interface Pilot {
   };
 }
 
+// Added missing constants required by Pilots.tsx
+export const LOCATIONS = [
+  "Penang",
+  "Kuala Lumpur",
+  "Selangor",
+  "Johor",
+  "Perak",
+  "Melaka",
+  "Pahang",
+  "Terengganu",
+  "Kelantan",
+  "Kedah",
+  "Perlis",
+  "Negeri Sembilan",
+  "Sabah",
+  "Sarawak"
+];
+
+export const SPECIALTIES = [
+  "Aerial Photography",
+  "Videography",
+  "Mapping & Surveying",
+  "Agricultural Spraying",
+  "Infrastructure Inspection",
+  "Real Estate",
+  "Events",
+  "FPV Racing"
+];
+
 /**
  * Fetches all pilots from Supabase.
- * Matches the import expected by Index.tsx and Pilots.tsx
  */
 export async function getPilots(): Promise<Pilot[]> {
-  const { data, error } = await supabase
-    .from('pilots')
-    .select('*')
-    .order('created_at', { ascending: false });
+  try {
+    const { data, error } = await supabase
+      .from('pilots')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error("Error fetching pilots:", error);
+    if (error) throw error;
+    return data as Pilot[];
+  } catch (err) {
+    console.error("Error fetching pilots:", err);
     return [];
   }
-
-  return data as Pilot[];
 }
 
 /**
  * Fetches a single pilot by ID.
- * Matches the import expected by PilotProfile.tsx
  */
 export async function getPilotById(id: string): Promise<Pilot | null> {
-  const { data, error } = await supabase
-    .from('pilots')
-    .select('*')
-    .eq('id', id)
-    .single();
+  try {
+    const { data, error } = await supabase
+      .from('pilots')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-  if (error) {
-    console.error("Error fetching pilot:", error);
+    if (error) throw error;
+    return data as Pilot;
+  } catch (err) {
+    console.error("Error fetching pilot:", err);
     return null;
   }
-
-  return data as Pilot;
 }
 
 /**
  * Utility to format WhatsApp numbers into a clickable URL.
- * Matches the import expected by PilotCard.tsx
  */
 export function getWhatsappUrl(input: string): string {
   if (!input) return "#";
   const digits = input.replace(/\D/g, "");
   
-  // Standard Malaysian format: 601xxxxxxx
   let normalized = digits;
   if (digits.startsWith("0")) {
     normalized = `6${digits}`;
