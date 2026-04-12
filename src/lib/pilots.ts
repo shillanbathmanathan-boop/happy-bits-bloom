@@ -6,20 +6,15 @@ export interface Pilot {
   location: string;
   whatsapp: string;
   specialties: string[];
-  caam_verified: boolean;
-  profile_photo?: string;
+  caam_verified: boolean; // Matches SQL: caam_verified
+  profile_photo?: string; // Matches SQL: profile_photo
   description?: string;
-  reviewCount?: number;
+  review_count?: number;  // FIXED: Was reviewCount (must match SQL review_count)
   rating?: number;
   available?: boolean;
   equipment?: string[];
   website?: string;
-  socialMedia?: {
-    facebook?: string;
-    instagram?: string;
-    youtube?: string;
-    tiktok?: string;
-  };
+  created_at?: string;
 }
 
 export const LOCATIONS = [
@@ -40,8 +35,14 @@ export async function getPilots(): Promise<Pilot[]> {
       .from('pilots')
       .select('*')
       .order('created_at', { ascending: false });
-    if (error) throw error;
-    return data as Pilot[];
+
+    if (error) {
+      console.error("Supabase Error:", error.message);
+      throw error;
+    }
+    
+    // Explicitly return data or empty array to prevent .slice() errors
+    return (data as Pilot[]) || [];
   } catch (err) {
     console.error("Error fetching pilots:", err);
     return [];
@@ -63,11 +64,7 @@ export async function getPilotById(id: string): Promise<Pilot | null> {
   }
 }
 
-/**
- * Adds a new pilot to the database.
- * Required by Register.tsx
- */
-export async function addPilot(pilot: Omit<Pilot, 'id'>): Promise<{ data: any; error: any }> {
+export async function addPilot(pilot: Omit<Pilot, 'id' | 'created_at'>): Promise<{ data: any; error: any }> {
   try {
     const { data, error } = await supabase
       .from('pilots')
@@ -79,20 +76,14 @@ export async function addPilot(pilot: Omit<Pilot, 'id'>): Promise<{ data: any; e
   }
 }
 
-/**
- * Normalizes WhatsApp numbers for the database.
- * Required by Register.tsx
- */
 export function normalizeWhatsappNumber(input: string): string {
   const digits = input.replace(/\D/g, "");
+  // Standard Malaysian format: 60123456789
   if (digits.startsWith("0")) return `6${digits}`;
-  if (!digits.startsWith("60")) return `60${digits}`;
+  if (digits.length > 0 && !digits.startsWith("60")) return `60${digits}`;
   return digits;
 }
 
-/**
- * Utility to format WhatsApp numbers into a clickable URL.
- */
 export function getWhatsappUrl(input: string): string {
   if (!input) return "#";
   const normalized = normalizeWhatsappNumber(input);
