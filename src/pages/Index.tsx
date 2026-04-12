@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -7,9 +8,9 @@ import Footer from "@/components/Footer";
 import TestimonialSection from "@/components/TestimonialSection";
 import FAQSection from "@/components/FAQSection";
 import AnimatedCounter from "@/components/AnimatedCounter";
-import { getPilots } from "@/lib/pilots";
+import { getPilots, Pilot } from "@/lib/pilots";
 import heroBg from "@/assets/hero-bg.jpg";
-import { ShieldCheck, Users, MapPin, Zap, Search, MessageCircle, Plane } from "lucide-react";
+import { ShieldCheck, Users, MapPin, Zap, Search, MessageCircle, Plane, Loader2 } from "lucide-react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -34,7 +35,24 @@ const steps = [
 ];
 
 const Index = () => {
-  const pilots = getPilots().slice(0, 3);
+  const [pilots, setPilots] = useState<Pilot[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPilots = async () => {
+      try {
+        const data = await getPilots();
+        setPilots(data || []);
+      } catch (error) {
+        console.error("Failed to load pilots:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPilots();
+  }, []);
+
+  const featuredPilots = pilots.slice(0, 3);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -192,20 +210,28 @@ const Index = () => {
             >
               Trusted professionals with verified CAAM Remote Operator Certificates.
             </motion.p>
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {pilots.map((pilot, i) => (
-                <motion.div
-                  key={pilot.id}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-50px" }}
-                  variants={fadeUp}
-                >
-                  <PilotCard pilot={pilot} />
-                </motion.div>
-              ))}
-            </div>
+            
+            {loading ? (
+              <div className="mt-20 flex justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {featuredPilots.map((pilot, i) => (
+                  <motion.div
+                    key={pilot.id}
+                    custom={i}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                    variants={fadeUp}
+                  >
+                    <PilotCard pilot={pilot} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
+            
             <motion.div
               className="mt-10 text-center"
               initial={{ opacity: 0 }}
@@ -220,10 +246,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Testimonials */}
         <TestimonialSection />
-
-        {/* FAQ */}
         <FAQSection />
 
         {/* CTA */}
