@@ -22,45 +22,24 @@ export interface Pilot {
   };
 }
 
-// Added missing constants required by Pilots.tsx
 export const LOCATIONS = [
-  "Penang",
-  "Kuala Lumpur",
-  "Selangor",
-  "Johor",
-  "Perak",
-  "Melaka",
-  "Pahang",
-  "Terengganu",
-  "Kelantan",
-  "Kedah",
-  "Perlis",
-  "Negeri Sembilan",
-  "Sabah",
-  "Sarawak"
+  "Penang", "Kuala Lumpur", "Selangor", "Johor", "Perak", 
+  "Melaka", "Pahang", "Terengganu", "Kelantan", "Kedah", 
+  "Perlis", "Negeri Sembilan", "Sabah", "Sarawak"
 ];
 
 export const SPECIALTIES = [
-  "Aerial Photography",
-  "Videography",
-  "Mapping & Surveying",
-  "Agricultural Spraying",
-  "Infrastructure Inspection",
-  "Real Estate",
-  "Events",
-  "FPV Racing"
+  "Aerial Photography", "Videography", "Mapping & Surveying", 
+  "Agricultural Spraying", "Infrastructure Inspection", 
+  "Real Estate", "Events", "FPV Racing"
 ];
 
-/**
- * Fetches all pilots from Supabase.
- */
 export async function getPilots(): Promise<Pilot[]> {
   try {
     const { data, error } = await supabase
       .from('pilots')
       .select('*')
       .order('created_at', { ascending: false });
-
     if (error) throw error;
     return data as Pilot[];
   } catch (err) {
@@ -69,9 +48,6 @@ export async function getPilots(): Promise<Pilot[]> {
   }
 }
 
-/**
- * Fetches a single pilot by ID.
- */
 export async function getPilotById(id: string): Promise<Pilot | null> {
   try {
     const { data, error } = await supabase
@@ -79,7 +55,6 @@ export async function getPilotById(id: string): Promise<Pilot | null> {
       .select('*')
       .eq('id', id)
       .single();
-
     if (error) throw error;
     return data as Pilot;
   } catch (err) {
@@ -89,18 +64,37 @@ export async function getPilotById(id: string): Promise<Pilot | null> {
 }
 
 /**
+ * Adds a new pilot to the database.
+ * Required by Register.tsx
+ */
+export async function addPilot(pilot: Omit<Pilot, 'id'>): Promise<{ data: any; error: any }> {
+  try {
+    const { data, error } = await supabase
+      .from('pilots')
+      .insert([pilot])
+      .select();
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+/**
+ * Normalizes WhatsApp numbers for the database.
+ * Required by Register.tsx
+ */
+export function normalizeWhatsappNumber(input: string): string {
+  const digits = input.replace(/\D/g, "");
+  if (digits.startsWith("0")) return `6${digits}`;
+  if (!digits.startsWith("60")) return `60${digits}`;
+  return digits;
+}
+
+/**
  * Utility to format WhatsApp numbers into a clickable URL.
  */
 export function getWhatsappUrl(input: string): string {
   if (!input) return "#";
-  const digits = input.replace(/\D/g, "");
-  
-  let normalized = digits;
-  if (digits.startsWith("0")) {
-    normalized = `6${digits}`;
-  } else if (!digits.startsWith("60")) {
-    normalized = `60${digits}`;
-  }
-  
+  const normalized = normalizeWhatsappNumber(input);
   return `https://wa.me/${normalized}`;
 }
