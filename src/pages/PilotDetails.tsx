@@ -132,7 +132,7 @@ const PilotDetails = () => {
               <h2 className="text-xl font-bold mb-4">Reviews</h2>
               <div className="space-y-6">
                 <ReviewForm pilotId={pilot.id} onReviewSubmitted={handleReviewSubmitted} />
-                <ReviewList pilotId={pilot.id} refreshKey={reviewRefresh} />
+                <ReviewList pilotId={pilot.id} refreshKey={reviewRefresh} onReviewChanged={handleReviewSubmitted} />
               </div>
             </section>
           </div>
