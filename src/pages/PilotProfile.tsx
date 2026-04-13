@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getPilotById, getWhatsappUrl } from "@/lib/pilots";
+import { getPilotById, getWhatsappUrl, getFullLocation } from "@/lib/pilots";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import PilotAvatar from "@/components/PilotAvatar";
@@ -85,7 +85,7 @@ const PilotProfile = () => {
               <div>
                 <h1 className="font-heading text-2xl font-bold text-foreground">{pilot.name}</h1>
                 <p className="mt-1 flex items-center gap-1 text-muted-foreground">
-                  <MapPin className="h-4 w-4" /> {pilot.location}
+                  <MapPin className="h-4 w-4" /> {getFullLocation(pilot)}
                 </p>
                 {pilot.rating !== undefined && (
                   <div className="mt-1 flex items-center gap-1 text-amber-500">
