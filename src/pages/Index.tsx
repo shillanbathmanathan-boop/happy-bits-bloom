@@ -93,9 +93,9 @@ const Index = () => {
         <section className="border-y bg-card py-10">
           <div className="container grid grid-cols-3 gap-6 text-center px-4">
             {[
-              { end: pilots.length || 50, label: "Registered Pilots", suffix: "+" },
-              { end: 14, label: "States Covered" },
-              { end: 8, label: "Specialties" },
+              { target: `${pilots.length || 50}+`, label: "Registered Pilots" },
+              { target: "14", label: "States Covered" },
+              { target: "8", label: "Specialties" },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
