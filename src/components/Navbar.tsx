@@ -56,7 +56,6 @@ const Navbar = () => {
             <div className="flex flex-col gap-3 pt-3">
               <Link to="/" onClick={() => setOpen(false)} className="text-sm font-medium">Home</Link>
               <Link to="/pilots" onClick={() => setOpen(false)} className="text-sm font-medium">Find Pilots</Link>
-              <Link to="/register" onClick={() => setOpen(false)} className="text-sm font-medium">Get Listed</Link>
               <Link to="/login" onClick={() => setOpen(false)} className="text-sm font-medium flex items-center gap-1.5">
                 <LogIn className="h-4 w-4" /> Sign In
               </Link>
