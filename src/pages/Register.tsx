@@ -103,21 +103,47 @@ const Register = () => {
       toast.error("Please enter your CAAM certification number.");
       return;
     }
-    if (caamVerified && !caamCertFile) {
+    if (caamVerified && !certFile) {
       toast.error("Please upload your CAAM certificate.");
       return;
     }
 
+    setSubmitting(true);
+
+    // Upload profile photo to storage if present
+    let profilePhotoUrl: string | undefined;
+    if (profilePhotoCanvas) {
+      const { url, error: photoErr } = await uploadProfilePhoto(profilePhotoCanvas);
+      if (photoErr || !url) {
+        toast.error("Failed to upload profile photo. Please try again.");
+        setSubmitting(false);
+        return;
+      }
+      profilePhotoUrl = url;
+    }
+
+    // Upload certificate to storage if present
+    let certFileUrl: string | undefined;
+    if (caamVerified && certFile) {
+      const { url, error: certErr } = await uploadToStorage(certFile, "certificates");
+      if (certErr || !url) {
+        toast.error("Failed to upload certificate. Please try again.");
+        setSubmitting(false);
+        return;
+      }
+      certFileUrl = url;
+    }
+
     const pilotData: any = {
       name: name.trim(),
-      profile_photo: profilePhoto,
+      profile_photo: profilePhotoUrl || undefined,
       location: state,
       district: district || undefined,
       whatsapp: normalizeWhatsappNumber(whatsapp.trim()),
       specialties: selectedSpecialties,
       caam_verified: caamVerified,
       caam_cert_number: caamVerified ? caamCertNumber.trim() : undefined,
-      caam_cert_file: caamVerified ? caamCertFile : undefined,
+      caam_cert_file: certFileUrl || undefined,
       equipment: equipment.length > 0 ? equipment : undefined,
       description: description.trim() || undefined,
       website: website.trim() || undefined,
@@ -127,12 +153,12 @@ const Register = () => {
       tiktok: tiktok.trim() || undefined,
     };
 
-    // Link to authenticated user if logged in
     if (user) {
       pilotData.user_id = user.id;
     }
 
     const { error } = await addPilot(pilotData);
+    setSubmitting(false);
 
     if (error) {
       toast.error("Something went wrong. Please try again.");
