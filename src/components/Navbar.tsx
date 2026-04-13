@@ -23,7 +23,6 @@ const Navbar = () => {
         <div className="hidden items-center gap-5 md:flex">
           <Link to="/" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Home</Link>
           <Link to="/pilots" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Find Pilots</Link>
-          <Link to="/register" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Get Listed</Link>
           <ThemeToggle />
           <Button variant="ghost" size="sm" asChild className="gap-1.5">
             <Link to="/login">
@@ -57,7 +56,6 @@ const Navbar = () => {
             <div className="flex flex-col gap-3 pt-3">
               <Link to="/" onClick={() => setOpen(false)} className="text-sm font-medium">Home</Link>
               <Link to="/pilots" onClick={() => setOpen(false)} className="text-sm font-medium">Find Pilots</Link>
-              <Link to="/register" onClick={() => setOpen(false)} className="text-sm font-medium">Get Listed</Link>
               <Link to="/login" onClick={() => setOpen(false)} className="text-sm font-medium flex items-center gap-1.5">
                 <LogIn className="h-4 w-4" /> Sign In
               </Link>
