@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getPilotById, getWhatsappUrl } from "@/lib/pilots";
+import { getPilotById, getWhatsappUrl, getFullLocation } from "@/lib/pilots";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import PilotAvatar from "@/components/PilotAvatar";
