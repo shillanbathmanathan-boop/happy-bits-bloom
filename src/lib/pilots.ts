@@ -109,6 +109,10 @@ export async function addPilot(pilot: Omit<Pilot, 'id' | 'created_at'>): Promise
       description: pilot.description || null,
       equipment: pilot.equipment || [],
       website: pilot.website || null,
+      facebook: pilot.facebook || null,
+      instagram: pilot.instagram || null,
+      youtube: pilot.youtube || null,
+      tiktok: pilot.tiktok || null,
       rating: pilot.rating || 0,
       review_count: pilot.review_count || 0,
       available: pilot.available ?? true
