@@ -80,8 +80,8 @@ const PilotDetails = () => {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
 
-      {/* Hero header */}
-      <div className="border-b bg-gradient-to-b from-primary/5 to-background">
+      {/* Header */}
+      <div className="border-b bg-muted/30">
         <div className="container px-4 pt-6 pb-0">
           <Link to="/pilots">
             <Button variant="ghost" size="sm" className="mb-4 gap-1.5 text-muted-foreground hover:text-foreground -ml-2">
