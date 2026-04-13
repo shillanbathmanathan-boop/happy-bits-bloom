@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { addPilot, SPECIALTIES, LOCATIONS, DISTRICTS, normalizeWhatsappNumber } from "@/lib/pilots";
 import { toast } from "sonner";
-import { Plus, X, Camera } from "lucide-react";
+import { Plus, X, Camera, Upload, FileCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import PilotAvatar from "@/components/PilotAvatar";
 

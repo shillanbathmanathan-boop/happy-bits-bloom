@@ -27,8 +27,8 @@ const PilotCard = ({ pilot }: PilotCardProps) => {
         )}
         {pilot.caam_verified && (
           <div className="absolute top-3 left-3">
-            <Badge className="bg-white/95 text-primary border-none shadow-sm font-semibold backdrop-blur-sm">
-              <ShieldCheck className="mr-1 h-3.5 w-3.5" /> Verified
+            <Badge className="bg-amber-500/95 text-white border-none shadow-sm font-semibold backdrop-blur-sm">
+              <ShieldCheck className="mr-1 h-3.5 w-3.5" /> CAAM Certified
             </Badge>
           </div>
         )}

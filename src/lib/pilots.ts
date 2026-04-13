@@ -9,6 +9,8 @@ export interface Pilot {
   whatsapp: string;
   specialties: string[];
   caam_verified: boolean;
+  caam_cert_number?: string;
+  caam_cert_file?: string;
   profile_photo?: string;
   description?: string;
   review_count?: number; 
