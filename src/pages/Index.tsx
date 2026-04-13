@@ -106,7 +106,7 @@ const Index = () => {
                 viewport={{ once: true }}
               >
                 <div className="text-3xl md:text-4xl font-extrabold text-primary">
-                  <AnimatedCounter end={stat.end} suffix={stat.suffix} />
+                  <AnimatedCounter target={stat.target} />
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
               </motion.div>
