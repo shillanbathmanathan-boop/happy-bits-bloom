@@ -1,13 +1,22 @@
-import { Link } from "react-router-dom";
-import { Menu, X, LogIn } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, LogIn, LogOut, UserCog } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useAuth } from "@/contexts/AuthContext";
 import logoIcon from "@/assets/logo-icon.png";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+    setOpen(false);
+  };
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -24,14 +33,29 @@ const Navbar = () => {
           <Link to="/" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Home</Link>
           <Link to="/pilots" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Find Pilots</Link>
           <ThemeToggle />
-          <Button variant="ghost" size="sm" asChild className="gap-1.5">
-            <Link to="/login">
-              <LogIn className="h-4 w-4" /> Sign In
-            </Link>
-          </Button>
-          <Button asChild size="sm">
-            <Link to="/register">List Your Service</Link>
-          </Button>
+          {user ? (
+            <>
+              <Button variant="ghost" size="sm" asChild className="gap-1.5">
+                <Link to="/edit-profile">
+                  <UserCog className="h-4 w-4" /> My Profile
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" className="gap-1.5" onClick={handleSignOut}>
+                <LogOut className="h-4 w-4" /> Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild className="gap-1.5">
+                <Link to="/login">
+                  <LogIn className="h-4 w-4" /> Sign In
+                </Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link to="/register">List Your Service</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -56,12 +80,25 @@ const Navbar = () => {
             <div className="flex flex-col gap-3 pt-3">
               <Link to="/" onClick={() => setOpen(false)} className="text-sm font-medium">Home</Link>
               <Link to="/pilots" onClick={() => setOpen(false)} className="text-sm font-medium">Find Pilots</Link>
-              <Link to="/login" onClick={() => setOpen(false)} className="text-sm font-medium flex items-center gap-1.5">
-                <LogIn className="h-4 w-4" /> Sign In
-              </Link>
-              <Button asChild size="sm">
-                <Link to="/register" onClick={() => setOpen(false)}>List Your Service</Link>
-              </Button>
+              {user ? (
+                <>
+                  <Link to="/edit-profile" onClick={() => setOpen(false)} className="text-sm font-medium flex items-center gap-1.5">
+                    <UserCog className="h-4 w-4" /> My Profile
+                  </Link>
+                  <button onClick={handleSignOut} className="text-sm font-medium flex items-center gap-1.5 text-left">
+                    <LogOut className="h-4 w-4" /> Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" onClick={() => setOpen(false)} className="text-sm font-medium flex items-center gap-1.5">
+                    <LogIn className="h-4 w-4" /> Sign In
+                  </Link>
+                  <Button asChild size="sm">
+                    <Link to="/register" onClick={() => setOpen(false)}>List Your Service</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </motion.div>
         )}
