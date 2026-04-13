@@ -29,6 +29,8 @@ const EditProfile = () => {
   const [pilotId, setPilotId] = useState<string | null>(null);
 
   const [profilePhoto, setProfilePhoto] = useState<string | undefined>();
+  const [profilePhotoCanvas, setProfilePhotoCanvas] = useState<HTMLCanvasElement | null>(null);
+  const [originalProfilePhotoUrl, setOriginalProfilePhotoUrl] = useState<string | undefined>();
   const [name, setName] = useState("");
   const [state, setState] = useState("");
   const [district, setDistrict] = useState("");
@@ -36,7 +38,8 @@ const EditProfile = () => {
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
   const [caamVerified, setCaamVerified] = useState(false);
   const [caamCertNumber, setCaamCertNumber] = useState("");
-  const [caamCertFile, setCaamCertFile] = useState<string | undefined>();
+  const [certFile, setCertFile] = useState<File | null>(null);
+  const [originalCertUrl, setOriginalCertUrl] = useState<string | undefined>();
   const [caamCertFileName, setCaamCertFileName] = useState("");
   const [equipment, setEquipment] = useState<string[]>([]);
   const [equipmentInput, setEquipmentInput] = useState("");
