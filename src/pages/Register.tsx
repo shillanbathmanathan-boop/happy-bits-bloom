@@ -66,6 +66,7 @@ const Register = () => {
         canvas.height = h;
         canvas.getContext("2d")!.drawImage(img, 0, 0, w, h);
         setProfilePhoto(canvas.toDataURL("image/jpeg", 0.8));
+        setProfilePhotoCanvas(canvas);
       };
       img.src = reader.result as string;
     };
