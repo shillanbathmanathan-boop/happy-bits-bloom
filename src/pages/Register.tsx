@@ -24,6 +24,10 @@ const Register = () => {
   const [whatsapp, setWhatsapp] = useState("");
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
   const [caamVerified, setCaamVerified] = useState(false);
+  const [caamCertNumber, setCaamCertNumber] = useState("");
+  const [caamCertFile, setCaamCertFile] = useState<string | undefined>();
+  const [caamCertFileName, setCaamCertFileName] = useState("");
+  const certFileInputRef = useRef<HTMLInputElement>(null);
   const [equipment, setEquipment] = useState<string[]>([]);
   const [equipmentInput, setEquipmentInput] = useState("");
   const [description, setDescription] = useState("");
