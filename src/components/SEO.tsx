@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 const SITE_NAME = "DroneHire Malaysia";
+const SITE_URL = "https://happy-bits-bloom.lovable.app";
 const DEFAULT_DESCRIPTION = "Find and hire CAAM-certified drone pilots across Malaysia for aerial photography, mapping, inspection, and more.";
 const DEFAULT_IMAGE = "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/38e9dcb4-0348-4550-885f-1fb3febc4971/id-preview-53dcabf3--9b44ebfe-7763-4662-9bee-2765ef5e7064.lovable.app-1775858174584.png";
 
@@ -8,7 +9,7 @@ interface SEOProps {
   title: string;
   description?: string;
   image?: string;
-  url?: string;
+  canonicalPath?: string;
   type?: "website" | "profile" | "article";
   jsonLd?: Record<string, any>;
 }
@@ -23,15 +24,30 @@ function setMeta(attr: "name" | "property", key: string, content: string) {
   el.setAttribute("content", content);
 }
 
-const SEO = ({ title, description, image, url, type = "website", jsonLd }: SEOProps) => {
+function setCanonical(href: string) {
+  let el = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+  if (!el) {
+    el = document.createElement("link");
+    el.setAttribute("rel", "canonical");
+    document.head.appendChild(el);
+  }
+  el.setAttribute("href", href);
+}
+
+const SEO = ({ title, description, image, canonicalPath, type = "website", jsonLd }: SEOProps) => {
   useEffect(() => {
     const fullTitle = `${title} | ${SITE_NAME}`;
     const desc = description || DEFAULT_DESCRIPTION;
     const img = image || DEFAULT_IMAGE;
-    const pageUrl = url || window.location.href;
+    const canonical = canonicalPath
+      ? `${SITE_URL}${canonicalPath}`
+      : `${SITE_URL}${window.location.pathname}`;
 
     // Title
     document.title = fullTitle;
+
+    // Canonical
+    setCanonical(canonical);
 
     // Standard meta
     setMeta("name", "description", desc);
@@ -40,7 +56,7 @@ const SEO = ({ title, description, image, url, type = "website", jsonLd }: SEOPr
     setMeta("property", "og:title", fullTitle);
     setMeta("property", "og:description", desc);
     setMeta("property", "og:image", img);
-    setMeta("property", "og:url", pageUrl);
+    setMeta("property", "og:url", canonical);
     setMeta("property", "og:type", type);
 
     // Twitter
@@ -63,11 +79,10 @@ const SEO = ({ title, description, image, url, type = "website", jsonLd }: SEOPr
     }
 
     return () => {
-      // Clean up JSON-LD on unmount
       const el = document.querySelector('script[data-seo-jsonld]');
       if (el) el.remove();
     };
-  }, [title, description, image, url, type, jsonLd]);
+  }, [title, description, image, canonicalPath, type, jsonLd]);
 
   return null;
 };
