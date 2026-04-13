@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export interface Pilot {
   id: string;
+  user_id?: string;
   name: string;
   location: string;
   district?: string;
@@ -91,7 +92,7 @@ export async function getPilotById(id: string): Promise<Pilot | null> {
 
 export async function addPilot(pilot: Omit<Pilot, 'id' | 'created_at'>): Promise<{ data: any; error: any }> {
   try {
-    const payload = {
+    const payload: any = {
       name: pilot.name,
       location: pilot.location,
       district: pilot.district || null,
@@ -108,6 +109,10 @@ export async function addPilot(pilot: Omit<Pilot, 'id' | 'created_at'>): Promise
       review_count: pilot.review_count || 0,
       available: pilot.available ?? true
     };
+
+    if ((pilot as any).user_id) {
+      payload.user_id = (pilot as any).user_id;
+    }
 
     const { data, error } = await supabase
       .from('pilots')
