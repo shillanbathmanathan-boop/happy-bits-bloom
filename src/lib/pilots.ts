@@ -19,6 +19,10 @@ export interface Pilot {
   available?: boolean;
   equipment?: string[];
   website?: string;
+  facebook?: string;
+  instagram?: string;
+  youtube?: string;
+  tiktok?: string;
   created_at?: string;
 }
 
@@ -48,7 +52,7 @@ export const DISTRICTS: Record<string, string[]> = {
 export const SPECIALTIES = [
   "Aerial Photography", "Videography", "Mapping & Surveying", 
   "Agricultural Spraying", "Infrastructure Inspection", 
-  "Real Estate", "Events", "FPV Racing"
+  "Real Estate", "Events", "FPV Racing", "Drone Rental"
 ];
 
 export function getFullLocation(pilot: Pilot): string {
