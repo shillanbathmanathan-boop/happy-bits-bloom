@@ -9,6 +9,8 @@ export interface Pilot {
   whatsapp: string;
   specialties: string[];
   caam_verified: boolean;
+  caam_cert_number?: string;
+  caam_cert_file?: string;
   profile_photo?: string;
   description?: string;
   review_count?: number; 
@@ -96,6 +98,8 @@ export async function addPilot(pilot: Omit<Pilot, 'id' | 'created_at'>): Promise
       whatsapp: pilot.whatsapp,
       specialties: pilot.specialties || [],
       caam_verified: pilot.caam_verified ?? false,
+      caam_cert_number: pilot.caam_cert_number || null,
+      caam_cert_file: pilot.caam_cert_file || null,
       profile_photo: pilot.profile_photo || null,
       description: pilot.description || null,
       equipment: pilot.equipment || [],
