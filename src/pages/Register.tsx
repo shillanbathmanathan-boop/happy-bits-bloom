@@ -15,6 +15,7 @@ import { Plus, X, Camera, Upload, FileCheck, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import PilotAvatar from "@/components/PilotAvatar";
 import { uploadProfilePhoto, uploadToStorage } from "@/lib/storage";
+import SEO from "@/components/SEO";
 
 const Register = () => {
   const navigate = useNavigate();

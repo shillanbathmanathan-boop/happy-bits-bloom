@@ -7,6 +7,7 @@ import { getPilots, SPECIALTIES, LOCATIONS } from "@/lib/pilots";
 import { Input } from "@/components/ui/input";
 import { Search, Filter, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import SEO from "@/components/SEO";
 
 export const Pilots = () => {
   const [search, setSearch] = useState("");

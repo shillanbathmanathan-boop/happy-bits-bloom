@@ -13,6 +13,7 @@ import FAQSection from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroBg from "@/assets/hero-bg.jpg";
+import SEO from "@/components/SEO";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -48,6 +49,22 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <SEO
+        title="Find Expert Drone Pilots in Malaysia"
+        description="The premier directory to find and hire CAAM-certified drone pilots for aerial photography, mapping, and industrial inspection across Malaysia."
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "DroneHire Malaysia",
+          url: window.location.origin,
+          description: "Malaysia's premier drone pilot directory",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: `${window.location.origin}/pilots?q={search_term_string}`,
+            "query-input": "required name=search_term_string",
+          },
+        }}
+      />
       <Navbar />
       
       <main className="flex-grow">

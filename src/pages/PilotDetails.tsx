@@ -15,6 +15,7 @@ import PilotAvatar from "@/components/PilotAvatar";
 import StarRating from "@/components/StarRating";
 import ReviewForm from "@/components/ReviewForm";
 import ReviewList from "@/components/ReviewList";
+import SEO from "@/components/SEO";
 
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">

@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Mail, Lock, Chrome } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const Login = () => {
   const navigate = useNavigate();

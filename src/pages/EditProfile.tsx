@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { Plus, X, Camera, Upload, FileCheck, Loader2, Trash2 } from "lucide-react";
 import PilotAvatar from "@/components/PilotAvatar";
 import { uploadProfilePhoto, uploadToStorage, deleteFromStorage } from "@/lib/storage";
+import SEO from "@/components/SEO";
 
 const EditProfile = () => {
   const navigate = useNavigate();
