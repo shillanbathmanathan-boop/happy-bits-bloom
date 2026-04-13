@@ -85,7 +85,7 @@ const PilotProfile = () => {
               <div>
                 <h1 className="font-heading text-2xl font-bold text-foreground">{pilot.name}</h1>
                 <p className="mt-1 flex items-center gap-1 text-muted-foreground">
-                  <MapPin className="h-4 w-4" /> {pilot.location}
+                  <MapPin className="h-4 w-4" /> {getFullLocation(pilot)}
                 </p>
                 {pilot.rating !== undefined && (
                   <div className="mt-1 flex items-center gap-1 text-amber-500">
