@@ -291,23 +291,32 @@ const Index = () => {
         <section className="py-16 md:py-20">
           <div className="container px-4 md:px-6">
             <motion.div
-              className="relative overflow-hidden rounded-3xl bg-primary p-10 md:p-16 text-center text-primary-foreground"
+              className="relative overflow-hidden rounded-3xl border bg-card p-10 md:p-16 text-center"
               initial={{ opacity: 0, scale: 0.98 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
             >
-              <div className="absolute inset-0 opacity-10" style={{
-                backgroundImage: "radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)",
-                backgroundSize: "32px 32px",
-              }} />
+              {/* Decorative blobs */}
+              <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+              <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-40 w-40 rounded-full bg-primary/5 blur-2xl" />
+
               <div className="relative">
-                <h2 className="text-2xl md:text-4xl font-extrabold">Are You a Drone Pilot?</h2>
-                <p className="mt-3 text-primary-foreground/80 max-w-lg mx-auto text-lg">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 text-sm text-primary font-medium mb-5">
+                  <Zap className="h-3.5 w-3.5" /> Join the Community
+                </div>
+                <h2 className="text-2xl md:text-4xl font-extrabold text-foreground">Are You a Drone Pilot?</h2>
+                <p className="mt-3 text-muted-foreground max-w-lg mx-auto text-lg">
                   Join Malaysia's fastest-growing drone pilot directory. Get discovered by clients across all 14 states.
                 </p>
-                <Button size="lg" variant="secondary" asChild className="mt-8 font-bold gap-2">
-                  <Link to="/register">Get Listed Now — It's Free <ArrowRight className="h-4 w-4" /></Link>
-                </Button>
+                <div className="flex flex-wrap justify-center gap-3 mt-8">
+                  <Button size="lg" asChild className="font-bold gap-2 shadow-lg shadow-primary/20">
+                    <Link to="/register">Get Listed Now — It's Free <ArrowRight className="h-4 w-4" /></Link>
+                  </Button>
+                  <Button size="lg" variant="outline" asChild className="font-bold gap-2">
+                    <Link to="/pilots">Browse Pilots</Link>
+                  </Button>
+                </div>
               </div>
             </motion.div>
           </div>
