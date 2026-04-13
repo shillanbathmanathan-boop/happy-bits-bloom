@@ -4,7 +4,7 @@ import { getPilots, LOCATIONS, SPECIALTIES } from "@/lib/pilots";
 import PilotCard from "@/components/PilotCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Hero from "@/components/Hero";
+import Hero from "@/components/Hero"; // Ensure this matches src/components/Hero.tsx
 import SearchFilters from "@/components/SearchFilters";
 
 const Index = () => {
@@ -17,7 +17,7 @@ const Index = () => {
     queryFn: getPilots,
   });
 
-  const filteredPilots = pilots.filter((pilot) => {
+  const filteredPilots = (pilots || []).filter((pilot) => {
     const matchesSearch = 
       pilot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       pilot.location.toLowerCase().includes(searchQuery.toLowerCase());
