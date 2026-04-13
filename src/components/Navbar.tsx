@@ -23,7 +23,6 @@ const Navbar = () => {
         <div className="hidden items-center gap-5 md:flex">
           <Link to="/" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Home</Link>
           <Link to="/pilots" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Find Pilots</Link>
-          <Link to="/register" className="text-sm font-medium text-foreground transition-colors hover:text-primary">Get Listed</Link>
           <ThemeToggle />
           <Button variant="ghost" size="sm" asChild className="gap-1.5">
             <Link to="/login">
