@@ -398,8 +398,8 @@ const Register = () => {
               </div>
             </div>
 
-            <Button type="submit" size="lg" className="w-full font-bold">
-              Submit & Get Listed
+            <Button type="submit" size="lg" className="w-full font-bold" disabled={submitting}>
+              {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Uploading...</> : "Submit & Get Listed"}
             </Button>
           </form>
         </motion.div>
