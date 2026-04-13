@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPilotById, getWhatsappUrl } from "@/lib/pilots";
@@ -6,14 +7,24 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MessageSquare, ShieldCheck, MapPin, ArrowLeft, Star, Globe, Facebook, Instagram, Youtube } from "lucide-react";
+import StarRating from "@/components/StarRating";
+import ReviewForm from "@/components/ReviewForm";
+import ReviewList from "@/components/ReviewList";
 
 const PilotDetails = () => {
   const { id } = useParams();
-  const { data: pilot, isLoading, error } = useQuery({
+  const [reviewRefresh, setReviewRefresh] = useState(0);
+
+  const { data: pilot, isLoading, error, refetch } = useQuery({
     queryKey: ["pilot", id],
     queryFn: () => getPilotById(id || ""),
     enabled: !!id,
   });
+
+  const handleReviewSubmitted = () => {
+    setReviewRefresh((r) => r + 1);
+    refetch();
+  };
 
   if (isLoading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   if (error || !pilot) return <div className="min-h-screen flex items-center justify-center">Pilot not found.</div>;
@@ -58,15 +69,16 @@ const PilotDetails = () => {
             
             <div className="flex items-center gap-6 text-muted-foreground">
               <div className="flex items-center"><MapPin className="mr-1 h-4 w-4" /> {pilot.location}</div>
-              <div className="flex items-center text-amber-500">
-                <Star className="mr-1 h-4 w-4 fill-current" />
-                {pilot.rating?.toFixed(1) || "5.0"} ({pilot.review_count || 0} reviews)
+              <div className="flex items-center gap-1.5">
+                <StarRating rating={Math.round(pilot.rating || 0)} size="sm" />
+                <span className="text-sm font-medium text-foreground">{pilot.rating?.toFixed(1) || "0.0"}</span>
+                <span className="text-sm">({pilot.review_count || 0} reviews)</span>
               </div>
             </div>
 
             <section>
               <h2 className="text-xl font-bold mb-3">About</h2>
-              <p className="text-slate-600 leading-relaxed">{pilot.description || "No description provided."}</p>
+              <p className="text-muted-foreground leading-relaxed">{pilot.description || "No description provided."}</p>
             </section>
 
             <section>
@@ -114,6 +126,15 @@ const PilotDetails = () => {
                 </div>
               </section>
             )}
+
+            {/* Reviews Section */}
+            <section>
+              <h2 className="text-xl font-bold mb-4">Reviews</h2>
+              <div className="space-y-6">
+                <ReviewForm pilotId={pilot.id} onReviewSubmitted={handleReviewSubmitted} />
+                <ReviewList pilotId={pilot.id} refreshKey={reviewRefresh} />
+              </div>
+            </section>
           </div>
         </div>
       </main>
