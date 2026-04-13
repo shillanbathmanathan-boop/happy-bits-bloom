@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { addPilot, SPECIALTIES, LOCATIONS, normalizeWhatsappNumber } from "@/lib/pilots";
 import { toast } from "sonner";
-import { Plus, X, Camera, Upload, FileCheck } from "lucide-react";
+import { Plus, X, Camera } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import PilotAvatar from "@/components/PilotAvatar";
 
@@ -22,18 +23,10 @@ const Register = () => {
   const [whatsapp, setWhatsapp] = useState("");
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
   const [caamVerified, setCaamVerified] = useState(false);
-  const [certificationNumber, setCertificationNumber] = useState("");
-  const [certificateFile, setCertificateFile] = useState<string | undefined>();
-  const [certificateFileName, setCertificateFileName] = useState("");
-  const certFileInputRef = useRef<HTMLInputElement>(null);
   const [equipment, setEquipment] = useState<string[]>([]);
   const [equipmentInput, setEquipmentInput] = useState("");
   const [description, setDescription] = useState("");
   const [website, setWebsite] = useState("");
-  const [facebook, setFacebook] = useState("");
-  const [instagram, setInstagram] = useState("");
-  const [youtube, setYoutube] = useState("");
-  const [tiktok, setTiktok] = useState("");
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -79,7 +72,7 @@ const Register = () => {
     setEquipment((prev) => prev.filter((e) => e !== item));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name.trim() || !location || !whatsapp.trim() || selectedSpecialties.length === 0) {
@@ -87,36 +80,22 @@ const Register = () => {
       return;
     }
 
-    if (caamVerified && !certificationNumber.trim()) {
-      toast.error("Please enter your CAAM certification number.");
-      return;
-    }
-
-    if (caamVerified && !certificateFile) {
-      toast.error("Please upload your CAAM certificate file.");
-      return;
-    }
-
-    const socialMedia: { facebook?: string; instagram?: string; youtube?: string; tiktok?: string } = {};
-    if (facebook.trim()) socialMedia.facebook = facebook.trim();
-    if (instagram.trim()) socialMedia.instagram = instagram.trim();
-    if (youtube.trim()) socialMedia.youtube = youtube.trim();
-    if (tiktok.trim()) socialMedia.tiktok = tiktok.trim();
-
-    addPilot({
+    const { error } = await addPilot({
       name: name.trim(),
-      profilePhoto,
+      profile_photo: profilePhoto,
       location,
       whatsapp: normalizeWhatsappNumber(whatsapp.trim()),
       specialties: selectedSpecialties,
-      caamVerified,
-      certificationNumber: caamVerified ? certificationNumber.trim() : undefined,
-      certificateFile: caamVerified ? certificateFile : undefined,
+      caam_verified: caamVerified,
       equipment: equipment.length > 0 ? equipment : undefined,
       description: description.trim() || undefined,
       website: website.trim() || undefined,
-      socialMedia: Object.keys(socialMedia).length > 0 ? socialMedia : undefined,
     });
+
+    if (error) {
+      toast.error("Something went wrong. Please try again.");
+      return;
+    }
 
     toast.success("Your profile has been listed!");
     navigate("/pilots");
@@ -126,7 +105,12 @@ const Register = () => {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1 py-12">
-        <div className="container max-w-lg">
+        <motion.div
+          className="container max-w-lg"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <h1 className="font-heading text-3xl font-bold text-foreground">List Your Drone Service</h1>
           <p className="mt-2 text-muted-foreground">
             Fill in your details below and your profile will be listed immediately on DroneHire.
@@ -134,16 +118,21 @@ const Register = () => {
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             {/* Profile Photo */}
-            <div className="flex flex-col items-center gap-3">
-              <div className="relative cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+            <motion.div
+              className="flex flex-col items-center gap-3"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+            >
+              <div className="relative cursor-pointer group" onClick={() => fileInputRef.current?.click()}>
                 <PilotAvatar name={name || "Your Name"} profilePhoto={profilePhoto} size="lg" />
-                <div className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
+                <div className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md transition-transform group-hover:scale-110">
                   <Camera className="h-4 w-4" />
                 </div>
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
               <p className="text-xs text-muted-foreground">Click to upload profile photo (max 2MB)</p>
-            </div>
+            </motion.div>
 
             {/* Basic Info */}
             <div>
@@ -180,10 +169,10 @@ const Register = () => {
                 {SPECIALTIES.map((s) => (
                   <label
                     key={s}
-                    className={`flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${
+                    className={`flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm transition-all duration-200 ${
                       selectedSpecialties.includes(s)
-                        ? "border-primary bg-primary/5 text-foreground"
-                        : "border-input text-muted-foreground hover:border-primary/50"
+                        ? "border-primary bg-primary/5 text-foreground shadow-sm"
+                        : "border-input text-muted-foreground hover:border-primary/50 hover:bg-muted/50"
                     }`}
                   >
                     <Checkbox checked={selectedSpecialties.includes(s)} onCheckedChange={() => toggleSpecialty(s)} />
@@ -199,61 +188,6 @@ const Register = () => {
                 <Checkbox checked={caamVerified} onCheckedChange={(checked) => setCaamVerified(checked === true)} />
                 I have a valid CAAM Remote Operator Certificate
               </label>
-              {caamVerified && (
-                <div className="space-y-3">
-                  <div>
-                    <Label htmlFor="certNumber">Certification Number *</Label>
-                    <Input
-                      id="certNumber"
-                      value={certificationNumber}
-                      onChange={(e) => setCertificationNumber(e.target.value)}
-                      placeholder="e.g. CAAM-2024-001"
-                      maxLength={50}
-                    />
-                  </div>
-                  <div>
-                    <Label>Upload Certificate *</Label>
-                    <p className="mb-2 text-xs text-muted-foreground">Upload your CAAM certificate (PDF, JPG, PNG — max 2MB)</p>
-                    <input
-                      ref={certFileInputRef}
-                      type="file"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (!file) return;
-                        if (file.size > 2 * 1024 * 1024) {
-                          toast.error("Certificate file must be under 2MB.");
-                          return;
-                        }
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          setCertificateFile(reader.result as string);
-                          setCertificateFileName(file.name);
-                        };
-                        reader.readAsDataURL(file);
-                      }}
-                    />
-                    {certificateFile ? (
-                      <div className="flex items-center gap-2 rounded-md border border-primary/30 bg-primary/5 px-3 py-2">
-                        <FileCheck className="h-4 w-4 text-primary" />
-                        <span className="flex-1 truncate text-sm text-foreground">{certificateFileName}</span>
-                        <button
-                          type="button"
-                          onClick={() => { setCertificateFile(undefined); setCertificateFileName(""); }}
-                          className="rounded-full p-0.5 hover:bg-muted-foreground/20"
-                        >
-                          <X className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    ) : (
-                      <Button type="button" variant="outline" className="w-full" onClick={() => certFileInputRef.current?.click()}>
-                        <Upload className="mr-2 h-4 w-4" /> Choose File
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Equipment */}
@@ -298,36 +232,17 @@ const Register = () => {
               <p className="mt-1 text-xs text-muted-foreground">{description.length}/500 characters</p>
             </div>
 
-            {/* Website & Social Media */}
-            <div className="space-y-3">
-              <Label className="text-base">Online Presence</Label>
-              <div>
-                <Label htmlFor="website" className="text-xs text-muted-foreground">Website</Label>
-                <Input id="website" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://yourwebsite.com" maxLength={200} />
-              </div>
-              <div>
-                <Label htmlFor="facebook" className="text-xs text-muted-foreground">Facebook</Label>
-                <Input id="facebook" value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="Facebook profile or page URL" maxLength={200} />
-              </div>
-              <div>
-                <Label htmlFor="instagram" className="text-xs text-muted-foreground">Instagram</Label>
-                <Input id="instagram" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="Instagram username" maxLength={100} />
-              </div>
-              <div>
-                <Label htmlFor="youtube" className="text-xs text-muted-foreground">YouTube</Label>
-                <Input id="youtube" value={youtube} onChange={(e) => setYoutube(e.target.value)} placeholder="YouTube channel name or URL" maxLength={200} />
-              </div>
-              <div>
-                <Label htmlFor="tiktok" className="text-xs text-muted-foreground">TikTok</Label>
-                <Input id="tiktok" value={tiktok} onChange={(e) => setTiktok(e.target.value)} placeholder="TikTok username" maxLength={100} />
-              </div>
+            {/* Website */}
+            <div>
+              <Label htmlFor="website">Website</Label>
+              <Input id="website" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://yourwebsite.com" maxLength={200} />
             </div>
 
-            <Button type="submit" size="lg" className="w-full">
+            <Button type="submit" size="lg" className="w-full font-bold">
               Submit & Get Listed
             </Button>
           </form>
-        </div>
+        </motion.div>
       </main>
       <Footer />
     </div>
