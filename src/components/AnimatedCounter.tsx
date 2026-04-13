@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface AnimatedCounterProps {
   target: string;
@@ -8,19 +8,8 @@ interface AnimatedCounterProps {
 const AnimatedCounter = ({ target = "0", duration = 2000 }: AnimatedCounterProps) => {
   const ref = useRef<HTMLSpanElement>(null);
   const [display, setDisplay] = useState("0");
-  const hasAnimated = useRef(false);
-  const lastTarget = useRef(target);
 
-  // Reset animation flag when target changes
-  if (target !== lastTarget.current) {
-    hasAnimated.current = false;
-    lastTarget.current = target;
-  }
-
-  const animate = useCallback(() => {
-    if (hasAnimated.current) return;
-    hasAnimated.current = true;
-
+  useEffect(() => {
     const safeTarget = target || "0";
     const numericMatch = safeTarget.match(/^(\d+)/);
     if (!numericMatch) {
@@ -30,28 +19,34 @@ const AnimatedCounter = ({ target = "0", duration = 2000 }: AnimatedCounterProps
 
     const endValue = parseInt(numericMatch[1]);
     const suffix = safeTarget.slice(numericMatch[1].length);
-    const startTime = performance.now();
 
-    const step = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = Math.round(eased * endValue);
-      setDisplay(`${current}${suffix}`);
-      if (progress < 1) requestAnimationFrame(step);
-    };
+    if (endValue === 0) {
+      setDisplay(`0${suffix}`);
+      return;
+    }
 
-    requestAnimationFrame(step);
-  }, [target, duration]);
-
-  useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    let animationId: number;
+
+    const runAnimation = () => {
+      const startTime = performance.now();
+      const step = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(eased * endValue);
+        setDisplay(`${current}${suffix}`);
+        if (progress < 1) animationId = requestAnimationFrame(step);
+      };
+      animationId = requestAnimationFrame(step);
+    };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          animate();
+          runAnimation();
           observer.disconnect();
         }
       },
@@ -59,8 +54,11 @@ const AnimatedCounter = ({ target = "0", duration = 2000 }: AnimatedCounterProps
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
-  }, [animate]);
+    return () => {
+      observer.disconnect();
+      if (animationId) cancelAnimationFrame(animationId);
+    };
+  }, [target, duration]);
 
   return <span ref={ref}>{display}</span>;
 };
