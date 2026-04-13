@@ -52,15 +52,16 @@ const Index = () => {
       <SEO
         title="Find Expert Drone Pilots in Malaysia"
         description="The premier directory to find and hire CAAM-certified drone pilots for aerial photography, mapping, and industrial inspection across Malaysia."
+        canonicalPath="/"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "DroneHire Malaysia",
-          url: window.location.origin,
+          url: "https://happy-bits-bloom.lovable.app",
           description: "Malaysia's premier drone pilot directory",
           potentialAction: {
             "@type": "SearchAction",
-            target: `${window.location.origin}/pilots?q={search_term_string}`,
+            target: "https://happy-bits-bloom.lovable.app/pilots?q={search_term_string}",
             "query-input": "required name=search_term_string",
           },
         }}

@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://happy-bits-bloom.lovable.app/sitemap.xml
