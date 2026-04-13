@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -13,7 +14,7 @@ import { SPECIALTIES, LOCATIONS, DISTRICTS, normalizeWhatsappNumber } from "@/li
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Plus, X, Camera, Upload, FileCheck, Loader2 } from "lucide-react";
+import { Plus, X, Camera, Upload, FileCheck, Loader2, Trash2 } from "lucide-react";
 import PilotAvatar from "@/components/PilotAvatar";
 
 const EditProfile = () => {
@@ -149,6 +150,13 @@ const EditProfile = () => {
     if (error) { toast.error("Failed to save changes."); return; }
     toast.success("Profile updated!");
     navigate(`/pilot/${pilotId}`);
+  };
+
+  const handleDelete = async () => {
+    const { error } = await supabase.from("pilots").delete().eq("id", pilotId!);
+    if (error) { toast.error("Failed to delete listing."); return; }
+    toast.success("Your listing has been removed.");
+    navigate("/pilots");
   };
 
   const availableDistricts = state ? (DISTRICTS[state] || []) : [];
@@ -314,6 +322,32 @@ const EditProfile = () => {
               {saving ? "Saving..." : "Save Changes"}
             </Button>
           </form>
+
+          <div className="mt-10 rounded-lg border border-destructive/30 bg-destructive/5 p-5">
+            <h3 className="text-sm font-semibold text-destructive">Danger Zone</h3>
+            <p className="mt-1 text-xs text-muted-foreground">Once deleted, your listing cannot be recovered.</p>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm" className="mt-3 gap-1.5">
+                  <Trash2 className="h-4 w-4" /> Delete My Listing
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete your listing?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently remove your pilot profile from DroneHire. This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    Yes, Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </motion.div>
       </main>
       <Footer />
