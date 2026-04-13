@@ -87,6 +87,15 @@ const Register = () => {
       return;
     }
 
+    if (caamVerified && !caamCertNumber.trim()) {
+      toast.error("Please enter your CAAM certification number.");
+      return;
+    }
+    if (caamVerified && !caamCertFile) {
+      toast.error("Please upload your CAAM certificate.");
+      return;
+    }
+
     const { error } = await addPilot({
       name: name.trim(),
       profile_photo: profilePhoto,
@@ -95,6 +104,8 @@ const Register = () => {
       whatsapp: normalizeWhatsappNumber(whatsapp.trim()),
       specialties: selectedSpecialties,
       caam_verified: caamVerified,
+      caam_cert_number: caamVerified ? caamCertNumber.trim() : undefined,
+      caam_cert_file: caamVerified ? caamCertFile : undefined,
       equipment: equipment.length > 0 ? equipment : undefined,
       description: description.trim() || undefined,
       website: website.trim() || undefined,
