@@ -11,15 +11,20 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { addPilot, SPECIALTIES, LOCATIONS, DISTRICTS, normalizeWhatsappNumber } from "@/lib/pilots";
 import { toast } from "sonner";
-import { Plus, X, Camera, Upload, FileCheck } from "lucide-react";
+import { Plus, X, Camera, Upload, FileCheck, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import PilotAvatar from "@/components/PilotAvatar";
+import { uploadProfilePhoto, uploadToStorage } from "@/lib/storage";
 
 const Register = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [profilePhoto, setProfilePhoto] = useState<string | undefined>();
+  const [profilePhotoFile, setProfilePhotoFile] = useState<File | null>(null);
+  const [profilePhotoCanvas, setProfilePhotoCanvas] = useState<HTMLCanvasElement | null>(null);
+  const [certFile, setCertFile] = useState<File | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [name, setName] = useState("");
   const [state, setState] = useState("");
   const [district, setDistrict] = useState("");
