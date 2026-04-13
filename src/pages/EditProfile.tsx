@@ -82,13 +82,14 @@ const EditProfile = () => {
     setPilotId(data.id);
     setName(data.name || "");
     setProfilePhoto(data.profile_photo || undefined);
+    setOriginalProfilePhotoUrl(data.profile_photo || undefined);
     setState(data.location || "");
     setDistrict(data.district || "");
     setWhatsapp(data.whatsapp || "");
     setSelectedSpecialties(data.specialties || []);
     setCaamVerified(data.caam_verified || false);
     setCaamCertNumber(data.caam_cert_number || "");
-    setCaamCertFile(data.caam_cert_file || undefined);
+    setOriginalCertUrl(data.caam_cert_file || undefined);
     setCaamCertFileName(data.caam_cert_file ? "Certificate uploaded" : "");
     setEquipment(data.equipment || []);
     setDescription(data.description || "");
@@ -116,6 +117,7 @@ const EditProfile = () => {
         canvas.width = w; canvas.height = h;
         canvas.getContext("2d")!.drawImage(img, 0, 0, w, h);
         setProfilePhoto(canvas.toDataURL("image/jpeg", 0.8));
+        setProfilePhotoCanvas(canvas);
       };
       img.src = reader.result as string;
     };
@@ -139,18 +141,38 @@ const EditProfile = () => {
     if (caamVerified && !caamCertNumber.trim()) { toast.error("Enter your CAAM certification number."); return; }
 
     setSaving(true);
+
+    // Upload new profile photo if changed
+    let profilePhotoUrl = profilePhoto;
+    if (profilePhotoCanvas) {
+      const { url, error: photoErr } = await uploadProfilePhoto(profilePhotoCanvas);
+      if (photoErr || !url) { toast.error("Failed to upload photo."); setSaving(false); return; }
+      profilePhotoUrl = url;
+      // Clean up old photo
+      if (originalProfilePhotoUrl) deleteFromStorage(originalProfilePhotoUrl);
+    }
+
+    // Upload new cert if changed
+    let certFileUrl = originalCertUrl;
+    if (certFile) {
+      const { url, error: certErr } = await uploadToStorage(certFile, "certificates");
+      if (certErr || !url) { toast.error("Failed to upload certificate."); setSaving(false); return; }
+      certFileUrl = url;
+      if (originalCertUrl) deleteFromStorage(originalCertUrl);
+    }
+
     const { error } = await supabase
       .from("pilots")
       .update({
         name: name.trim(),
-        profile_photo: profilePhoto || null,
+        profile_photo: profilePhotoUrl || null,
         location: state,
         district: district || null,
         whatsapp: normalizeWhatsappNumber(whatsapp.trim()),
         specialties: selectedSpecialties,
         caam_verified: caamVerified,
         caam_cert_number: caamVerified ? caamCertNumber.trim() : null,
-        caam_cert_file: caamVerified ? caamCertFile || null : null,
+        caam_cert_file: caamVerified ? certFileUrl || null : null,
         equipment: equipment.length > 0 ? equipment : [],
         description: description.trim() || null,
         website: website.trim() || null,
@@ -272,16 +294,15 @@ const EditProfile = () => {
                         const file = e.target.files?.[0];
                         if (!file) return;
                         if (file.size > 1024 * 1024) { toast.error("Certificate must be under 1MB."); return; }
-                        const reader = new FileReader();
-                        reader.onload = () => { setCaamCertFile(reader.result as string); setCaamCertFileName(file.name); };
-                        reader.readAsDataURL(file);
+                        setCertFile(file);
+                        setCaamCertFileName(file.name);
                       }}
                     />
-                    {caamCertFile ? (
+                    {(certFile || originalCertUrl) ? (
                       <div className="flex items-center gap-2 rounded-md border border-accent/30 bg-accent/5 px-3 py-2">
                         <FileCheck className="h-4 w-4 text-accent" />
                         <span className="flex-1 truncate text-sm">{caamCertFileName}</span>
-                        <button type="button" onClick={() => { setCaamCertFile(undefined); setCaamCertFileName(""); }} className="rounded-full p-0.5 hover:bg-muted-foreground/20">
+                        <button type="button" onClick={() => { setCertFile(null); setOriginalCertUrl(undefined); setCaamCertFileName(""); }} className="rounded-full p-0.5 hover:bg-muted-foreground/20">
                           <X className="h-3.5 w-3.5" />
                         </button>
                       </div>
