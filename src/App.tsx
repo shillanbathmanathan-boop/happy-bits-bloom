@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import EditProfile from "./pages/EditProfile";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/pilots" element={<Pilots />} />
