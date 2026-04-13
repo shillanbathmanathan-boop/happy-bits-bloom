@@ -8,6 +8,7 @@ interface AnimatedCounterProps {
 const AnimatedCounter = ({ target = "0", duration = 2000 }: AnimatedCounterProps) => {
   const ref = useRef<HTMLSpanElement>(null);
   const [display, setDisplay] = useState("0");
+  const animationId = useRef<number>();
 
   useEffect(() => {
     const safeTarget = target || "0";
@@ -20,29 +21,29 @@ const AnimatedCounter = ({ target = "0", duration = 2000 }: AnimatedCounterProps
     const endValue = parseInt(numericMatch[1]);
     const suffix = safeTarget.slice(numericMatch[1].length);
 
+    // Show final value immediately if zero
     if (endValue === 0) {
       setDisplay(`0${suffix}`);
       return;
     }
 
     const el = ref.current;
-    if (!el) return;
-
-    let animationId: number;
+    if (!el) { setDisplay(`${endValue}${suffix}`); return; }
 
     const runAnimation = () => {
+      if (animationId.current) cancelAnimationFrame(animationId.current);
       const startTime = performance.now();
       const step = (currentTime: number) => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
-        const current = Math.round(eased * endValue);
-        setDisplay(`${current}${suffix}`);
-        if (progress < 1) animationId = requestAnimationFrame(step);
+        setDisplay(`${Math.round(eased * endValue)}${suffix}`);
+        if (progress < 1) animationId.current = requestAnimationFrame(step);
       };
-      animationId = requestAnimationFrame(step);
+      animationId.current = requestAnimationFrame(step);
     };
 
+    // If already visible, animate immediately
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -50,13 +51,13 @@ const AnimatedCounter = ({ target = "0", duration = 2000 }: AnimatedCounterProps
           observer.disconnect();
         }
       },
-      { rootMargin: "-50px" }
+      { rootMargin: "0px" }
     );
 
     observer.observe(el);
     return () => {
       observer.disconnect();
-      if (animationId) cancelAnimationFrame(animationId);
+      if (animationId.current) cancelAnimationFrame(animationId.current);
     };
   }, [target, duration]);
 
