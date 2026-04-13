@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getPilots, LOCATIONS, SPECIALTIES } from "@/lib/pilots";
-import PilotCard from "@/components/PilotCard";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Hero from "@/components/Hero"; // Matches src/components/Hero.tsx
-import SearchFilters from "@/components/SearchFilters";
+import PilotCard from "../components/PilotCard";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import Hero from "../components/Hero"; 
+import SearchFilters from "../components/SearchFilters";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
