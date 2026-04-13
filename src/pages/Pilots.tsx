@@ -52,6 +52,7 @@ export const Pilots = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <SEO title="Browse Drone Pilots" description="Search and filter CAAM-certified drone pilots across Malaysia by state, specialty, and equipment." />
       <Navbar />
       <main className="flex-1 py-12">
         <div className="container">

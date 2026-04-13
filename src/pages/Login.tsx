@@ -55,6 +55,7 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <SEO title="Log In" description="Sign in to your DroneHire Malaysia account to manage your pilot profile." />
       <Navbar />
       <main className="flex-1 flex items-center justify-center py-12">
         <motion.div
