@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MessageSquare, ShieldCheck, MapPin, ArrowLeft, Star } from "lucide-react";
+import { MessageSquare, ShieldCheck, MapPin, ArrowLeft, Star, Globe, Facebook, Instagram, Youtube } from "lucide-react";
 
 const PilotDetails = () => {
   const { id } = useParams();
@@ -77,6 +77,43 @@ const PilotDetails = () => {
                 ))}
               </div>
             </section>
+
+            {/* Social Links */}
+            {(pilot.website || pilot.facebook || pilot.instagram || pilot.youtube || pilot.tiktok) && (
+              <section>
+                <h2 className="text-xl font-bold mb-3">Links</h2>
+                <div className="flex flex-wrap gap-3">
+                  {pilot.website && (
+                    <a href={pilot.website} target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="sm" className="gap-2"><Globe className="h-4 w-4" /> Website</Button>
+                    </a>
+                  )}
+                  {pilot.facebook && (
+                    <a href={pilot.facebook} target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="sm" className="gap-2"><Facebook className="h-4 w-4" /> Facebook</Button>
+                    </a>
+                  )}
+                  {pilot.instagram && (
+                    <a href={pilot.instagram} target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="sm" className="gap-2"><Instagram className="h-4 w-4" /> Instagram</Button>
+                    </a>
+                  )}
+                  {pilot.youtube && (
+                    <a href={pilot.youtube} target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="sm" className="gap-2"><Youtube className="h-4 w-4" /> YouTube</Button>
+                    </a>
+                  )}
+                  {pilot.tiktok && (
+                    <a href={pilot.tiktok} target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78 2.92 2.92 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.57 6.33 6.33 0 0 0 9.37 22a6.33 6.33 0 0 0 6.37-6.23V9.12a8.16 8.16 0 0 0 3.85.96V6.69Z"/></svg>
+                        TikTok
+                      </Button>
+                    </a>
+                  )}
+                </div>
+              </section>
+            )}
           </div>
         </div>
       </main>
