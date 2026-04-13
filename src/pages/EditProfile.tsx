@@ -41,6 +41,10 @@ const EditProfile = () => {
   const [equipmentInput, setEquipmentInput] = useState("");
   const [description, setDescription] = useState("");
   const [website, setWebsite] = useState("");
+  const [facebook, setFacebook] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [youtube, setYoutube] = useState("");
+  const [tiktok, setTiktok] = useState("");
   const [available, setAvailable] = useState(true);
 
   useEffect(() => {
@@ -85,6 +89,10 @@ const EditProfile = () => {
     setEquipment(data.equipment || []);
     setDescription(data.description || "");
     setWebsite(data.website || "");
+    setFacebook(data.facebook || "");
+    setInstagram(data.instagram || "");
+    setYoutube(data.youtube || "");
+    setTiktok(data.tiktok || "");
     setAvailable(data.available ?? true);
     setLoading(false);
   };
@@ -142,6 +150,10 @@ const EditProfile = () => {
         equipment: equipment.length > 0 ? equipment : [],
         description: description.trim() || null,
         website: website.trim() || null,
+        facebook: facebook.trim() || null,
+        instagram: instagram.trim() || null,
+        youtube: youtube.trim() || null,
+        tiktok: tiktok.trim() || null,
         available,
       })
       .eq("id", pilotId!);
@@ -316,6 +328,29 @@ const EditProfile = () => {
             <div>
               <Label>Website</Label>
               <Input value={website} onChange={(e) => setWebsite(e.target.value)} maxLength={200} />
+            </div>
+
+            {/* Social Media */}
+            <div className="space-y-3">
+              <Label>Social Media Links</Label>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-muted-foreground">Facebook</Label>
+                  <Input value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="https://facebook.com/yourpage" maxLength={200} />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Instagram</Label>
+                  <Input value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="https://instagram.com/yourhandle" maxLength={200} />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">YouTube</Label>
+                  <Input value={youtube} onChange={(e) => setYoutube(e.target.value)} placeholder="https://youtube.com/@yourchannel" maxLength={200} />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">TikTok</Label>
+                  <Input value={tiktok} onChange={(e) => setTiktok(e.target.value)} placeholder="https://tiktok.com/@yourhandle" maxLength={200} />
+                </div>
+              </div>
             </div>
 
             <Button type="submit" size="lg" className="w-full font-bold" disabled={saving}>

@@ -9,6 +9,13 @@ const AnimatedCounter = ({ target = "0", duration = 2000 }: AnimatedCounterProps
   const ref = useRef<HTMLSpanElement>(null);
   const [display, setDisplay] = useState("0");
   const hasAnimated = useRef(false);
+  const lastTarget = useRef(target);
+
+  // Reset animation flag when target changes
+  if (target !== lastTarget.current) {
+    hasAnimated.current = false;
+    lastTarget.current = target;
+  }
 
   const animate = useCallback(() => {
     if (hasAnimated.current) return;

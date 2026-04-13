@@ -19,6 +19,10 @@ export interface Pilot {
   available?: boolean;
   equipment?: string[];
   website?: string;
+  facebook?: string;
+  instagram?: string;
+  youtube?: string;
+  tiktok?: string;
   created_at?: string;
 }
 
@@ -48,7 +52,7 @@ export const DISTRICTS: Record<string, string[]> = {
 export const SPECIALTIES = [
   "Aerial Photography", "Videography", "Mapping & Surveying", 
   "Agricultural Spraying", "Infrastructure Inspection", 
-  "Real Estate", "Events", "FPV Racing"
+  "Real Estate", "Events", "FPV Racing", "Drone Rental"
 ];
 
 export function getFullLocation(pilot: Pilot): string {
@@ -105,6 +109,10 @@ export async function addPilot(pilot: Omit<Pilot, 'id' | 'created_at'>): Promise
       description: pilot.description || null,
       equipment: pilot.equipment || [],
       website: pilot.website || null,
+      facebook: pilot.facebook || null,
+      instagram: pilot.instagram || null,
+      youtube: pilot.youtube || null,
+      tiktok: pilot.tiktok || null,
       rating: pilot.rating || 0,
       review_count: pilot.review_count || 0,
       available: pilot.available ?? true

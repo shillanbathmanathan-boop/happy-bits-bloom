@@ -34,6 +34,10 @@ const Register = () => {
   const [equipmentInput, setEquipmentInput] = useState("");
   const [description, setDescription] = useState("");
   const [website, setWebsite] = useState("");
+  const [facebook, setFacebook] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [youtube, setYoutube] = useState("");
+  const [tiktok, setTiktok] = useState("");
 
   const availableDistricts = state ? (DISTRICTS[state] || []) : [];
 
@@ -111,6 +115,10 @@ const Register = () => {
       equipment: equipment.length > 0 ? equipment : undefined,
       description: description.trim() || undefined,
       website: website.trim() || undefined,
+      facebook: facebook.trim() || undefined,
+      instagram: instagram.trim() || undefined,
+      youtube: youtube.trim() || undefined,
+      tiktok: tiktok.trim() || undefined,
     };
 
     // Link to authenticated user if logged in
@@ -337,6 +345,29 @@ const Register = () => {
             <div>
               <Label htmlFor="website">Website</Label>
               <Input id="website" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://yourwebsite.com" maxLength={200} />
+            </div>
+
+            {/* Social Media */}
+            <div className="space-y-3">
+              <Label>Social Media Links</Label>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label htmlFor="facebook" className="text-xs text-muted-foreground">Facebook</Label>
+                  <Input id="facebook" value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="https://facebook.com/yourpage" maxLength={200} />
+                </div>
+                <div>
+                  <Label htmlFor="instagram" className="text-xs text-muted-foreground">Instagram</Label>
+                  <Input id="instagram" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="https://instagram.com/yourhandle" maxLength={200} />
+                </div>
+                <div>
+                  <Label htmlFor="youtube" className="text-xs text-muted-foreground">YouTube</Label>
+                  <Input id="youtube" value={youtube} onChange={(e) => setYoutube(e.target.value)} placeholder="https://youtube.com/@yourchannel" maxLength={200} />
+                </div>
+                <div>
+                  <Label htmlFor="tiktok" className="text-xs text-muted-foreground">TikTok</Label>
+                  <Input id="tiktok" value={tiktok} onChange={(e) => setTiktok(e.target.value)} placeholder="https://tiktok.com/@yourhandle" maxLength={200} />
+                </div>
+              </div>
             </div>
 
             <Button type="submit" size="lg" className="w-full font-bold">
