@@ -15,6 +15,7 @@ import { Plus, X, Camera, Upload, FileCheck, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import PilotAvatar from "@/components/PilotAvatar";
 import { uploadProfilePhoto, uploadToStorage } from "@/lib/storage";
+import SEO from "@/components/SEO";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -171,6 +172,7 @@ const Register = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <SEO title="Register as a Drone Pilot" description="List your drone pilot services on DroneHire Malaysia for free. Get discovered by clients across all 14 states." />
       <Navbar />
       <main className="flex-1 py-12">
         <motion.div

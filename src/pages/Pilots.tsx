@@ -7,6 +7,7 @@ import { getPilots, SPECIALTIES, LOCATIONS } from "@/lib/pilots";
 import { Input } from "@/components/ui/input";
 import { Search, Filter, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import SEO from "@/components/SEO";
 
 export const Pilots = () => {
   const [search, setSearch] = useState("");
@@ -51,6 +52,7 @@ export const Pilots = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <SEO title="Browse Drone Pilots" description="Search and filter CAAM-certified drone pilots across Malaysia by state, specialty, and equipment." />
       <Navbar />
       <main className="flex-1 py-12">
         <div className="container">

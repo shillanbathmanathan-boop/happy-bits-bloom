@@ -1,8 +1,10 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const Terms = () => (
   <div className="flex min-h-screen flex-col">
+    <SEO title="Terms of Service" description="Terms of Service for DroneHire Malaysia drone pilot directory." />
     <Navbar />
     <main className="flex-1 py-12">
       <div className="container max-w-3xl prose prose-sm dark:prose-invert">

@@ -15,6 +15,7 @@ import PilotAvatar from "@/components/PilotAvatar";
 import StarRating from "@/components/StarRating";
 import ReviewForm from "@/components/ReviewForm";
 import ReviewList from "@/components/ReviewList";
+import SEO from "@/components/SEO";
 
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -78,9 +79,23 @@ const PilotDetails = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <SEO
+        title={`${pilot.name} — Drone Pilot in ${fullLocation}`}
+        description={pilot.description || `Hire ${pilot.name}, a ${pilot.caam_verified ? "CAAM-certified" : ""} drone pilot based in ${fullLocation}, Malaysia.`}
+        image={pilot.profile_photo || undefined}
+        type="profile"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: pilot.name,
+          jobTitle: "Drone Pilot",
+          address: { "@type": "PostalAddress", addressLocality: pilot.district || pilot.location, addressRegion: pilot.location, addressCountry: "MY" },
+          ...(pilot.profile_photo ? { image: pilot.profile_photo } : {}),
+          ...(pilot.rating ? { aggregateRating: { "@type": "AggregateRating", ratingValue: pilot.rating, reviewCount: pilot.review_count || 0, bestRating: 5 } } : {}),
+          knowsAbout: pilot.specialties,
+        }}
+      />
       <Navbar />
-
-      {/* Header */}
       <div className="border-b bg-muted/30">
         <div className="container px-4 pt-6 pb-0">
           <Link to="/pilots">

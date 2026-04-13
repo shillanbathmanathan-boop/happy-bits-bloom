@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import SEO from "@/components/SEO";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
@@ -54,6 +55,10 @@ const PilotProfile = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-muted/30">
+      <SEO
+        title={`${pilot.name} — My Pilot Profile`}
+        description={`View and manage your drone pilot profile on DroneHire Malaysia.`}
+      />
       <Navbar />
       <main className="flex-1 py-8 md:py-12">
         <div className="container max-w-3xl px-4">
