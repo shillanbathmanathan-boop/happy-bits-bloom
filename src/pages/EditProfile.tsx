@@ -214,6 +214,7 @@ const EditProfile = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <SEO title="Edit Your Profile" description="Update your drone pilot profile on DroneHire Malaysia." />
       <Navbar />
       <main className="flex-1 py-12">
         <motion.div className="container max-w-lg" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>

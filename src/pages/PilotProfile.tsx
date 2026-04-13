@@ -55,6 +55,10 @@ const PilotProfile = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-muted/30">
+      <SEO
+        title={`${pilot.name} — My Pilot Profile`}
+        description={`View and manage your drone pilot profile on DroneHire Malaysia.`}
+      />
       <Navbar />
       <main className="flex-1 py-8 md:py-12">
         <div className="container max-w-3xl px-4">
