@@ -301,12 +301,8 @@ const Register = () => {
                           toast.error("Certificate file must be under 1MB.");
                           return;
                         }
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          setCaamCertFile(reader.result as string);
-                          setCaamCertFileName(file.name);
-                        };
-                        reader.readAsDataURL(file);
+                        setCertFile(file);
+                        setCaamCertFileName(file.name);
                       }}
                     />
                     {caamCertFile ? (
