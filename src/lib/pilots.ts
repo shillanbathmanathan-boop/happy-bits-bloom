@@ -5,6 +5,7 @@ export interface Pilot {
   id: string;
   name: string;
   location: string;
+  district?: string;
   whatsapp: string;
   specialties: string[];
   caam_verified: boolean;
@@ -24,11 +25,33 @@ export const LOCATIONS = [
   "Perlis", "Negeri Sembilan", "Sabah", "Sarawak"
 ];
 
+export const DISTRICTS: Record<string, string[]> = {
+  "Penang": ["George Town", "Butterworth", "Bayan Lepas", "Nibong Tebal", "Balik Pulau"],
+  "Kuala Lumpur": ["Bukit Bintang", "Cheras", "Wangsa Maju", "Kepong", "Bangsar", "Setapak"],
+  "Selangor": ["Petaling Jaya", "Shah Alam", "Subang Jaya", "Klang", "Ampang", "Kajang", "Rawang", "Sepang"],
+  "Johor": ["Johor Bahru", "Iskandar Puteri", "Batu Pahat", "Muar", "Kluang", "Pontian", "Kota Tinggi"],
+  "Perak": ["Ipoh", "Taiping", "Teluk Intan", "Sitiawan", "Kampar", "Batu Gajah"],
+  "Melaka": ["Melaka Tengah", "Alor Gajah", "Jasin"],
+  "Pahang": ["Kuantan", "Temerloh", "Bentong", "Cameron Highlands", "Raub"],
+  "Terengganu": ["Kuala Terengganu", "Kemaman", "Dungun", "Besut"],
+  "Kelantan": ["Kota Bharu", "Pasir Mas", "Tumpat", "Tanah Merah"],
+  "Kedah": ["Alor Setar", "Sungai Petani", "Kulim", "Langkawi"],
+  "Perlis": ["Kangar", "Arau", "Padang Besar"],
+  "Negeri Sembilan": ["Seremban", "Port Dickson", "Nilai", "Bahau"],
+  "Sabah": ["Kota Kinabalu", "Sandakan", "Tawau", "Lahad Datu", "Keningau"],
+  "Sarawak": ["Kuching", "Miri", "Sibu", "Bintulu", "Limbang"],
+};
+
 export const SPECIALTIES = [
   "Aerial Photography", "Videography", "Mapping & Surveying", 
   "Agricultural Spraying", "Infrastructure Inspection", 
   "Real Estate", "Events", "FPV Racing"
 ];
+
+export function getFullLocation(pilot: Pilot): string {
+  if (pilot.district) return `${pilot.district}, ${pilot.location}`;
+  return pilot.location;
+}
 
 export async function getPilots(): Promise<Pilot[]> {
   try {
@@ -64,17 +87,12 @@ export async function getPilotById(id: string): Promise<Pilot | null> {
   }
 }
 
-/**
- * Adds a new pilot to the database.
- * This version "cleans" the data before sending to prevent 400 errors
- * caused by extra fields from form state.
- */
 export async function addPilot(pilot: Omit<Pilot, 'id' | 'created_at'>): Promise<{ data: any; error: any }> {
   try {
-    // Only include keys that exist in your SQL 'create table' definition
     const payload = {
       name: pilot.name,
       location: pilot.location,
+      district: pilot.district || null,
       whatsapp: pilot.whatsapp,
       specialties: pilot.specialties || [],
       caam_verified: pilot.caam_verified ?? false,

@@ -7,11 +7,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Shield, Zap } from "lucide-react";
+import { Search, MapPin, Shield, Zap, ArrowRight } from "lucide-react";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import FAQSection from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import heroBg from "@/assets/hero-bg.jpg";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -35,9 +36,10 @@ const Index = () => {
   const filteredPilots = (pilots || []).filter((pilot) => {
     const name = pilot.name?.toLowerCase() || "";
     const location = pilot.location?.toLowerCase() || "";
+    const district = pilot.district?.toLowerCase() || "";
     const search = searchQuery.toLowerCase();
     
-    const matchesSearch = name.includes(search) || location.includes(search);
+    const matchesSearch = name.includes(search) || location.includes(search) || district.includes(search);
     const matchesLocation = locationFilter === "all" || pilot.location === locationFilter;
     const matchesSpecialty = specialtyFilter === "all" || (pilot.specialties?.includes(specialtyFilter));
 
@@ -49,43 +51,62 @@ const Index = () => {
       <Navbar />
       
       <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 md:py-28">
-          <div className="absolute inset-0 opacity-[0.03]" style={{
-            backgroundImage: "radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)",
-            backgroundSize: "40px 40px",
-          }} />
-          <div className="container relative text-center px-4 md:px-6">
-            <motion.h1
-              className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground leading-tight"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              Find Expert Drone Pilots{" "}
-              <span className="text-primary">in Malaysia</span>
-            </motion.h1>
-            <motion.p
-              className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mt-5"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.15 }}
-            >
-              The premier directory to find and hire CAAM-certified drone pilots for aerial photography, mapping, and industrial inspection.
-            </motion.p>
-            <motion.div
-              className="flex flex-wrap justify-center gap-4 mt-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <Button size="lg" asChild className="font-bold shadow-lg shadow-primary/20">
-                <Link to="/pilots">Browse Pilots</Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild className="font-bold">
-                <Link to="/register">Get Listed Free</Link>
-              </Button>
-            </motion.div>
+        {/* Hero Section with Background Image */}
+        <section className="relative overflow-hidden min-h-[520px] flex items-center">
+          {/* Background image */}
+          <div className="absolute inset-0">
+            <img 
+              src={heroBg} 
+              alt="" 
+              className="h-full w-full object-cover"
+              width={1920}
+              height={800}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+          </div>
+
+          <div className="container relative z-10 py-20 md:py-28 px-4 md:px-6">
+            <div className="max-w-2xl">
+              <motion.div
+                className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 text-sm text-primary font-medium mb-6"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <Shield className="h-3.5 w-3.5" /> CAAM-Certified Professionals
+              </motion.div>
+              <motion.h1
+                className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.1]"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                Find Expert Drone Pilots{" "}
+                <span className="text-primary">in Malaysia</span>
+              </motion.h1>
+              <motion.p
+                className="text-muted-foreground text-lg md:text-xl max-w-xl mt-5"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.25 }}
+              >
+                The premier directory to find and hire CAAM-certified drone pilots for aerial photography, mapping, and industrial inspection.
+              </motion.p>
+              <motion.div
+                className="flex flex-wrap gap-4 mt-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                <Button size="lg" asChild className="font-bold shadow-lg shadow-primary/25 gap-2">
+                  <Link to="/pilots">Browse Pilots <ArrowRight className="h-4 w-4" /></Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild className="font-bold bg-background/80 backdrop-blur-sm">
+                  <Link to="/register">Get Listed Free</Link>
+                </Button>
+              </motion.div>
+            </div>
           </div>
         </section>
 
@@ -119,28 +140,40 @@ const Index = () => {
           <div className="container px-4 md:px-6">
             <motion.h2
               className="text-2xl md:text-3xl font-bold text-center text-foreground"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
               How It Works
             </motion.h2>
+            <motion.p
+              className="text-center text-muted-foreground mt-2 max-w-lg mx-auto"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              Three simple steps to connect with the perfect drone pilot for your project.
+            </motion.p>
             <div className="grid md:grid-cols-3 gap-8 mt-12">
               {[
-                { icon: Search, title: "Search", desc: "Browse pilots by location, specialty, or equipment." },
-                { icon: Shield, title: "Verify", desc: "Check CAAM certification and ratings from past clients." },
-                { icon: Zap, title: "Connect", desc: "Contact pilots directly via WhatsApp — no middleman." },
+                { icon: Search, title: "Search", desc: "Browse pilots by state, district, specialty, or equipment.", step: "01" },
+                { icon: Shield, title: "Verify", desc: "Check CAAM certification and ratings from past clients.", step: "02" },
+                { icon: Zap, title: "Connect", desc: "Contact pilots directly via WhatsApp — no middleman.", step: "03" },
               ].map((step, i) => (
                 <motion.div
                   key={step.title}
-                  className="text-center p-6 rounded-2xl border bg-card hover:shadow-lg transition-shadow duration-300"
+                  className="relative text-center p-8 rounded-2xl border bg-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
                   custom={i}
                   variants={fadeUp}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
                 >
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
+                  <span className="absolute top-4 right-4 text-4xl font-extrabold text-muted/50 group-hover:text-primary/20 transition-colors">
+                    {step.step}
+                  </span>
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
                     <step.icon className="h-7 w-7" />
                   </div>
                   <h3 className="font-heading text-lg font-bold text-foreground">{step.title}</h3>
@@ -155,13 +188,21 @@ const Index = () => {
         <section className="py-16 bg-muted/30">
           <div className="container px-4 md:px-6">
             <motion.h2
-              className="text-2xl md:text-3xl font-bold text-center text-foreground mb-8"
+              className="text-2xl md:text-3xl font-bold text-center text-foreground mb-2"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
               Featured Pilots
             </motion.h2>
+            <motion.p
+              className="text-center text-muted-foreground mb-8"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+            >
+              Discover top-rated drone professionals across Malaysia
+            </motion.p>
 
             <motion.div
               className="grid gap-4 md:grid-cols-4 items-end bg-card p-6 rounded-2xl border shadow-sm mb-10"
@@ -174,7 +215,7 @@ const Index = () => {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input 
-                    placeholder="Search by name or location..." 
+                    placeholder="Search by name, state, or district..." 
                     className="pl-10"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -183,13 +224,13 @@ const Index = () => {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-foreground">Location</label>
+                <label className="text-sm font-semibold text-foreground">State</label>
                 <Select value={locationFilter} onValueChange={setLocationFilter}>
                   <SelectTrigger>
-                    <SelectValue placeholder="All Locations" />
+                    <SelectValue placeholder="All States" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Locations</SelectItem>
+                    <SelectItem value="all">All States</SelectItem>
                     {LOCATIONS.map(loc => <SelectItem key={loc} value={loc}>{loc}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -212,7 +253,7 @@ const Index = () => {
             {isLoading ? (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="h-[350px] rounded-2xl bg-muted animate-pulse" />
+                  <div key={i} className="h-[420px] rounded-2xl bg-muted animate-pulse" />
                 ))}
               </div>
             ) : (
@@ -220,7 +261,7 @@ const Index = () => {
                 {filteredPilots.map((pilot, i) => (
                   <motion.div
                     key={pilot.id}
-                    custom={i}
+                    custom={i % 6}
                     variants={fadeUp}
                     initial="hidden"
                     whileInView="visible"
@@ -233,10 +274,42 @@ const Index = () => {
             )}
             
             {!isLoading && filteredPilots.length === 0 && (
-              <div className="text-center py-20 bg-card rounded-2xl border-2 border-dashed">
-                <p className="text-muted-foreground text-lg">No pilots found matching your criteria.</p>
-              </div>
+              <motion.div
+                className="text-center py-20 bg-card rounded-2xl border-2 border-dashed"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <MapPin className="h-10 w-10 mx-auto text-muted-foreground/50 mb-3" />
+                <p className="text-muted-foreground text-lg font-medium">No pilots found matching your criteria.</p>
+                <p className="text-muted-foreground text-sm mt-1">Try adjusting your filters or search terms.</p>
+              </motion.div>
             )}
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="py-16 md:py-20">
+          <div className="container px-4 md:px-6">
+            <motion.div
+              className="relative overflow-hidden rounded-3xl bg-primary p-10 md:p-16 text-center text-primary-foreground"
+              initial={{ opacity: 0, scale: 0.98 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+            >
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: "radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)",
+                backgroundSize: "32px 32px",
+              }} />
+              <div className="relative">
+                <h2 className="text-2xl md:text-4xl font-extrabold">Are You a Drone Pilot?</h2>
+                <p className="mt-3 text-primary-foreground/80 max-w-lg mx-auto text-lg">
+                  Join Malaysia's fastest-growing drone pilot directory. Get discovered by clients across all 14 states.
+                </p>
+                <Button size="lg" variant="secondary" asChild className="mt-8 font-bold gap-2">
+                  <Link to="/register">Get Listed Now — It's Free <ArrowRight className="h-4 w-4" /></Link>
+                </Button>
+              </div>
+            </motion.div>
           </div>
         </section>
 

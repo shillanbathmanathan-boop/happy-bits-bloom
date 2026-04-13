@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { addPilot, SPECIALTIES, LOCATIONS, normalizeWhatsappNumber } from "@/lib/pilots";
+import { addPilot, SPECIALTIES, LOCATIONS, DISTRICTS, normalizeWhatsappNumber } from "@/lib/pilots";
 import { toast } from "sonner";
 import { Plus, X, Camera } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +19,8 @@ const Register = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [profilePhoto, setProfilePhoto] = useState<string | undefined>();
   const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
+  const [state, setState] = useState("");
+  const [district, setDistrict] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
   const [caamVerified, setCaamVerified] = useState(false);
@@ -27,6 +28,8 @@ const Register = () => {
   const [equipmentInput, setEquipmentInput] = useState("");
   const [description, setDescription] = useState("");
   const [website, setWebsite] = useState("");
+
+  const availableDistricts = state ? (DISTRICTS[state] || []) : [];
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -75,7 +78,7 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name.trim() || !location || !whatsapp.trim() || selectedSpecialties.length === 0) {
+    if (!name.trim() || !state || !whatsapp.trim() || selectedSpecialties.length === 0) {
       toast.error("Please fill in all required fields and select at least one specialty.");
       return;
     }
@@ -83,7 +86,8 @@ const Register = () => {
     const { error } = await addPilot({
       name: name.trim(),
       profile_photo: profilePhoto,
-      location,
+      location: state,
+      district: district || undefined,
       whatsapp: normalizeWhatsappNumber(whatsapp.trim()),
       specialties: selectedSpecialties,
       caam_verified: caamVerified,
@@ -140,20 +144,38 @@ const Register = () => {
               <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Ahmad Zulkar" maxLength={100} required />
             </div>
 
-            <div>
-              <Label htmlFor="location">Location *</Label>
-              <select
-                id="location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                required
-              >
-                <option value="">Select your state</option>
-                {LOCATIONS.map((loc) => (
-                  <option key={loc} value={loc}>{loc}</option>
-                ))}
-              </select>
+            {/* State & District */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label htmlFor="state">State *</Label>
+                <select
+                  id="state"
+                  value={state}
+                  onChange={(e) => { setState(e.target.value); setDistrict(""); }}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  required
+                >
+                  <option value="">Select state</option>
+                  {LOCATIONS.map((loc) => (
+                    <option key={loc} value={loc}>{loc}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="district">District</Label>
+                <select
+                  id="district"
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+                  disabled={!state}
+                >
+                  <option value="">Select district</option>
+                  {availableDistricts.map((d) => (
+                    <option key={d} value={d}>{d}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div>
