@@ -305,13 +305,13 @@ const Register = () => {
                         setCaamCertFileName(file.name);
                       }}
                     />
-                    {caamCertFile ? (
+                    {certFile ? (
                       <div className="flex items-center gap-2 rounded-md border border-accent/30 bg-accent/5 px-3 py-2">
                         <FileCheck className="h-4 w-4 text-accent" />
                         <span className="flex-1 truncate text-sm text-foreground">{caamCertFileName}</span>
                         <button
                           type="button"
-                          onClick={() => { setCaamCertFile(undefined); setCaamCertFileName(""); }}
+                          onClick={() => { setCertFile(null); setCaamCertFileName(""); }}
                           className="rounded-full p-0.5 hover:bg-muted-foreground/20"
                         >
                           <X className="h-3.5 w-3.5" />
