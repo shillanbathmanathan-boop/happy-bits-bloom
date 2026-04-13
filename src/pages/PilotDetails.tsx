@@ -83,6 +83,7 @@ const PilotDetails = () => {
         title={`${pilot.name} — Drone Pilot in ${fullLocation}`}
         description={pilot.description || `Hire ${pilot.name}, a ${pilot.caam_verified ? "CAAM-certified" : ""} drone pilot based in ${fullLocation}, Malaysia.`}
         image={pilot.profile_photo || undefined}
+        canonicalPath={`/pilot/${id}`}
         type="profile"
         jsonLd={{
           "@context": "https://schema.org",
