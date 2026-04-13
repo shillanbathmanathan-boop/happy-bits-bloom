@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 
 export interface Pilot {
@@ -6,10 +7,10 @@ export interface Pilot {
   location: string;
   whatsapp: string;
   specialties: string[];
-  caam_verified: boolean; // Matches SQL: caam_verified
-  profile_photo?: string; // Matches SQL: profile_photo
+  caam_verified: boolean;
+  profile_photo?: string;
   description?: string;
-  review_count?: number;  // FIXED: Was reviewCount (must match SQL review_count)
+  review_count?: number; 
   rating?: number;
   available?: boolean;
   equipment?: string[];
@@ -37,11 +38,10 @@ export async function getPilots(): Promise<Pilot[]> {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error("Supabase Error:", error.message);
+      console.error("Supabase Fetch Error:", error.message);
       throw error;
     }
     
-    // Explicitly return data or empty array to prevent .slice() errors
     return (data as Pilot[]) || [];
   } catch (err) {
     console.error("Error fetching pilots:", err);
@@ -64,21 +64,48 @@ export async function getPilotById(id: string): Promise<Pilot | null> {
   }
 }
 
+/**
+ * Adds a new pilot to the database.
+ * This version "cleans" the data before sending to prevent 400 errors
+ * caused by extra fields from form state.
+ */
 export async function addPilot(pilot: Omit<Pilot, 'id' | 'created_at'>): Promise<{ data: any; error: any }> {
   try {
+    // Only include keys that exist in your SQL 'create table' definition
+    const payload = {
+      name: pilot.name,
+      location: pilot.location,
+      whatsapp: pilot.whatsapp,
+      specialties: pilot.specialties || [],
+      caam_verified: pilot.caam_verified ?? false,
+      profile_photo: pilot.profile_photo || null,
+      description: pilot.description || null,
+      equipment: pilot.equipment || [],
+      website: pilot.website || null,
+      rating: pilot.rating || 0,
+      review_count: pilot.review_count || 0,
+      available: pilot.available ?? true
+    };
+
     const { data, error } = await supabase
       .from('pilots')
-      .insert([pilot])
+      .insert([payload])
       .select();
+
+    if (error) {
+      console.error("Supabase Insert Error:", error.message);
+    }
+
     return { data, error };
   } catch (err) {
+    console.error("Add pilot exception:", err);
     return { data: null, error: err };
   }
 }
 
 export function normalizeWhatsappNumber(input: string): string {
+  if (!input) return "";
   const digits = input.replace(/\D/g, "");
-  // Standard Malaysian format: 60123456789
   if (digits.startsWith("0")) return `6${digits}`;
   if (digits.length > 0 && !digits.startsWith("60")) return `60${digits}`;
   return digits;
