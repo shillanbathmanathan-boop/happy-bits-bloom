@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import { useAuth } from "@/contexts/AuthContext";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,7 @@ import PilotAvatar from "@/components/PilotAvatar";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [profilePhoto, setProfilePhoto] = useState<string | undefined>();
   const [name, setName] = useState("");
@@ -96,7 +98,7 @@ const Register = () => {
       return;
     }
 
-    const { error } = await addPilot({
+    const pilotData: any = {
       name: name.trim(),
       profile_photo: profilePhoto,
       location: state,
@@ -109,7 +111,14 @@ const Register = () => {
       equipment: equipment.length > 0 ? equipment : undefined,
       description: description.trim() || undefined,
       website: website.trim() || undefined,
-    });
+    };
+
+    // Link to authenticated user if logged in
+    if (user) {
+      pilotData.user_id = user.id;
+    }
+
+    const { error } = await addPilot(pilotData);
 
     if (error) {
       toast.error("Something went wrong. Please try again.");
