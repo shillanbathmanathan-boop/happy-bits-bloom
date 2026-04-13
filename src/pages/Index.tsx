@@ -4,7 +4,7 @@ import { getPilots, LOCATIONS, SPECIALTIES } from "@/lib/pilots";
 import PilotCard from "@/components/PilotCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Hero from "@/components/Hero"; // Ensure this matches src/components/Hero.tsx
+import Hero from "@/components/Hero/Hero"; // Corrected path to the folder
 import SearchFilters from "@/components/SearchFilters";
 
 const Index = () => {
@@ -18,9 +18,11 @@ const Index = () => {
   });
 
   const filteredPilots = (pilots || []).filter((pilot) => {
-    const matchesSearch = 
-      pilot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      pilot.location.toLowerCase().includes(searchQuery.toLowerCase());
+    const name = pilot.name?.toLowerCase() || "";
+    const location = pilot.location?.toLowerCase() || "";
+    const search = searchQuery.toLowerCase();
+    
+    const matchesSearch = name.includes(search) || location.includes(search);
     const matchesLocation = locationFilter === "all" || pilot.location === locationFilter;
     const matchesSpecialty = specialtyFilter === "all" || (pilot.specialties?.includes(specialtyFilter));
 
@@ -28,10 +30,10 @@ const Index = () => {
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <Hero />
-      <main className="flex-grow container py-8 px-4 md:px-6">
+      <main className="flex-grow container py-8 px-4">
         <div className="flex flex-col space-y-8">
           <SearchFilters 
             searchQuery={searchQuery}
@@ -47,7 +49,7 @@ const Index = () => {
           {isLoading ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-[350px] rounded-xl bg-muted animate-pulse" />
+                <div key={i} className="h-[300px] rounded-xl bg-muted animate-pulse" />
               ))}
             </div>
           ) : (
