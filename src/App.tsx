@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import { Pilots } from "./pages/Pilots";
-import PilotProfile from "./pages/PilotProfile";
+import PilotDetails from "./pages/PilotDetails";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import EditProfile from "./pages/EditProfile";
@@ -25,7 +25,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/pilots" element={<Pilots />} />
-            <Route path="/pilot/:id" element={<PilotProfile />} />
+            <Route path="/pilot/:id" element={<PilotDetails />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/edit-profile" element={<EditProfile />} />
