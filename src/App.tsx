@@ -13,6 +13,7 @@ import EditProfile from "./pages/EditProfile";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -26,11 +27,11 @@ const App = () => (
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/pilots" element={<Pilots />} />
-            <Route path="/pilot/:id" element={<PilotDetails />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/pilots" element={<ProtectedRoute><Pilots /></ProtectedRoute>} />
+            <Route path="/pilot/:id" element={<ProtectedRoute><PilotDetails /></ProtectedRoute>} />
+            <Route path="/register" element={<ProtectedRoute><Register /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
-            <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
             <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
